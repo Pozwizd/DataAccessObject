@@ -40,7 +40,7 @@ public class UserDaoJdbc implements UserDao {
         openConnection();
         try {
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO shop.user (username, password, email, phone_number) VALUES (?, ?, ?, ?)");
+                    "INSERT INTO users (username, password, email, phone_number) VALUES (?, ?, ?, ?)");
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
@@ -74,7 +74,7 @@ public class UserDaoJdbc implements UserDao {
                 System.out.println("Ошибка при установлении соединения с базой данных: " + e.getMessage());
             }
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM shop.user WHERE id=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE id=?");
             stmt.setInt(1, id);
 
             ResultSet rs = stmt.executeQuery();
@@ -110,14 +110,14 @@ public class UserDaoJdbc implements UserDao {
         openConnection();
         try {
             PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE shop.user SET username = ?, password = ?, email = ?, phone_number = ? WHERE id = ?");
+                    "UPDATE users SET username = ?, password = ?, email = ?, phone_number = ? WHERE id = ?");
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getPhoneNumber());
             stmt.setInt(5, user.getId());
-
+            stmt.executeUpdate();
             stmt.close();
 
         } catch (SQLException e) {
@@ -133,7 +133,7 @@ public class UserDaoJdbc implements UserDao {
         List<User> users = new ArrayList<>();
         openConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM shop.user");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM shop.users");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -170,7 +170,7 @@ public class UserDaoJdbc implements UserDao {
             stmt.setInt(1, user.getId());
             stmt.executeUpdate();
 
-            stmt = connection.prepareStatement("DELETE FROM shop.User WHERE id = ?");
+            stmt = connection.prepareStatement("DELETE FROM users WHERE id = ?");
             stmt.setInt(1, user.getId());
             stmt.executeUpdate();
 

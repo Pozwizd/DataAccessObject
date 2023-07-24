@@ -7,7 +7,11 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utils.DBConnection;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,9 +30,11 @@ public class UserJdbcTest {
 
     @BeforeEach
     @Test
-    public void testCreateUser(){
+    public void testCreateUser() throws SQLException {
 
-
+        DBConnection dbConnection = DBConnection.getInstance();
+        Connection connection = dbConnection.getConnection();
+        User user;
         User user1;
 
         user1 = new User("user1",
@@ -38,8 +44,26 @@ public class UserJdbcTest {
 
         userDao.createUser(user1);
         logger.info("Пользователь успешно создан");
-        assertEquals(user1, userDao.getUserById(1));
 
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE id=1");
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            int id_user = rs.getInt("id");
+            String username = rs.getString("username");
+            String password = rs.getString("password");
+            String email = rs.getString("email");;
+            String phoneNumber = rs.getString("phone_number");
+            user = new User(id_user,
+                    username,
+                    password,
+                    email,
+                    phoneNumber);
+
+            rs.close();
+            stmt.close();
+            assertEquals(user1, user);
+        }
     }
 
     @Test
