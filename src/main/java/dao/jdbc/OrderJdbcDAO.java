@@ -2,24 +2,21 @@ package dao.jdbc;
 
 import dao.OrderDao;
 import models.Order;
-import utils.DBConnection;
+import utils.ConnectionPool;
 
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utils.DBConnection.closeConnection;
 
 public class OrderJdbcDAO implements OrderDao {
-    DBConnection dbConnection;
 
     public void createOrder(Order order) {
 
-        Connection conn = dbConnection.getConnection();
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO shop.orders (user_id, order_list, total_price) VALUES (?, ?, ?)");
 
             stmt.setInt(1, order.getUserId());
@@ -31,8 +28,6 @@ public class OrderJdbcDAO implements OrderDao {
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка добавления пользователя", e);
-        } finally {
-            closeConnection(conn);
         }
 
     }
@@ -41,10 +36,10 @@ public class OrderJdbcDAO implements OrderDao {
     public List<Order> getUserOrders(int userId) {
 
         List<Order> userOrders = new ArrayList<>();
-        Connection conn = dbConnection.getConnection();
-        try {
 
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM orders WHERE user_id = ?");
+        try(Connection connection = ConnectionPool.getConnection()) {
+
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM orders WHERE user_id = ?");
             stmt.setInt(1, userId);
 
             ResultSet rs = stmt.executeQuery();
@@ -62,8 +57,6 @@ public class OrderJdbcDAO implements OrderDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            closeConnection(conn);
         }
 
         return userOrders;
@@ -74,10 +67,9 @@ public class OrderJdbcDAO implements OrderDao {
     public List<Order> getAllOrders() {
 
         List<Order> allOrders = new ArrayList<>();
-        Connection conn = dbConnection.getConnection();
-        try {
+        try(Connection connection = ConnectionPool.getConnection()) {
 
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM orders");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM orders");
 
             ResultSet rs = stmt.executeQuery();
 
@@ -94,8 +86,6 @@ public class OrderJdbcDAO implements OrderDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            closeConnection(conn);
         }
 
         return allOrders;

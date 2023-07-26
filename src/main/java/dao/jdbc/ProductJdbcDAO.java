@@ -3,7 +3,8 @@ package dao.jdbc;
 
 import dao.ProductDao;
 import models.Product;
-import utils.DBConnection;
+import utils.ConnectionPool;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,24 +13,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utils.DBConnection.closeConnection;
+
 
 
 public class ProductJdbcDAO implements ProductDao {
 
     private static final String SQL_GET_ALL = "SELECT * FROM product";
-    private DBConnection dbConnection;
 
 
     @Override
     public List<Product> getAllProducts() {
+
         List<Product> products = new ArrayList<>();
 
-        Connection conn = null;
 
-        try {
-            conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(SQL_GET_ALL);
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(SQL_GET_ALL);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -44,8 +43,6 @@ public class ProductJdbcDAO implements ProductDao {
             }
         } catch (SQLException e) {
             System.out.println("Ошибка получения пользователей");
-        } finally {
-            closeConnection(conn);
         }
         return products;
     }
@@ -54,11 +51,11 @@ public class ProductJdbcDAO implements ProductDao {
     public Product getProductById(int productId) {
 
         Product product = null;
-        Connection conn = null;
 
-        try {
-            conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product WHERE id=?");
+
+        try(Connection connection = ConnectionPool.getConnection()) {
+
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM product WHERE id=?");
             stmt.setInt(1, productId);
 
             ResultSet rs = stmt.executeQuery();
@@ -76,8 +73,6 @@ public class ProductJdbcDAO implements ProductDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection(conn);
         }
 
         return product;
@@ -89,8 +84,7 @@ public class ProductJdbcDAO implements ProductDao {
 
         Connection conn = null;
 
-        try {
-            conn = dbConnection.getConnection();
+        try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(
                     "INSERT INTO product (product_name, description, price, quantity) VALUES (?, ?, ?, ?)");
 
@@ -103,8 +97,6 @@ public class ProductJdbcDAO implements ProductDao {
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка добавления пользователя", e);
-        } finally {
-            closeConnection(conn);
         }
 
     }
@@ -112,11 +104,8 @@ public class ProductJdbcDAO implements ProductDao {
     @Override
     public void updateProduct(Product product) {
 
-        Connection conn = null;
-
-        try {
-            conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
                     "UPDATE product SET product_name = ? , description = ?, price = ?, quantity = ? WHERE id = ?");
 
             stmt.setString(1, product.getProductName());
@@ -127,18 +116,14 @@ public class ProductJdbcDAO implements ProductDao {
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка добавления пользователя", e);
-        } finally {
-            closeConnection(conn);
         }
     }
 
     @Override
     public void deleteProduct(int productId) {
 
-        Connection conn = null;
-        try {
-            conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
                     "DELETE FROM product WHERE id = ?");
 
             stmt.setInt(1, productId);
@@ -147,8 +132,6 @@ public class ProductJdbcDAO implements ProductDao {
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка удаления пользователя", e);
-        } finally {
-            closeConnection(conn);
         }
 
     }

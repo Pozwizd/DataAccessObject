@@ -2,24 +2,18 @@ package dao.jdbc;
 
 import dao.UserDetailsDao;
 import models.UserDetails;
-import utils.DBConnection;
+import utils.ConnectionPool;
 
 import java.sql.*;
 
-import static utils.DBConnection.closeConnection;
-
 public class UserDetailsJdbcDao implements UserDetailsDao {
 
-    private DBConnection dbConnection;
 
     @Override
     public void createUserDetails(int userId, UserDetails details) {
 
-        Connection conn = null;
-
-        try {
-            conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO user_details (user_id, first_name, last_name, date_of_birth, address) " +
                             "VALUES (?, ?, ?, ?, ?)");
 
@@ -34,7 +28,7 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка создания user details", e);
         } finally {
-            closeConnection(conn);
+
         }
     }
 
@@ -42,10 +36,8 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
 
 
         UserDetails userDetails = null;
-        Connection conn = null;
-        try {
-            conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user_details WHERE user_id=?");
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_details WHERE user_id=?");
             stmt.setInt(1, userId);
 
             ResultSet rs = stmt.executeQuery();
@@ -61,8 +53,6 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection(conn);
         }
 
 
@@ -72,11 +62,8 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
     @Override
     public void updateUserDetails(int userId, UserDetails userDetails) {
 
-        Connection conn = null;
-
-        try {
-            conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
                     "UPDATE user_details " +
                             "SET first_name = ?, last_name = ?, date_of_birth = ?, address = ? " +
                             "WHERE user_id = ?");
@@ -91,8 +78,6 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка обновления деталей пользователя", e);
-        } finally {
-            closeConnection(conn);
         }
 
     }
