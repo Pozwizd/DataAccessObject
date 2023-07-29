@@ -24,7 +24,7 @@ public class OrderJdbcDao implements OrderDao {
 
             stmt.setInt(1, order.getUserId());
             stmt.setString(2, order.getOrderList());
-            stmt.setBigDecimal(3, order.getTotalPrice());
+            stmt.setInt(3, order.getTotalPrice());
 
 
             stmt.executeUpdate();
@@ -51,7 +51,7 @@ public class OrderJdbcDao implements OrderDao {
                 int orderId = rs.getInt("id");
                 userId = rs.getInt("userId");
                 String orderList = rs.getString("orderList");
-                BigDecimal totalPrice = rs.getBigDecimal("total_price");
+                int totalPrice = rs.getInt("total_price");
                 String products = rs.getString("products");
 
                 Order order = new Order(orderId, userId, orderList, totalPrice);
@@ -80,7 +80,7 @@ public class OrderJdbcDao implements OrderDao {
                 int orderId = rs.getInt("id");
                 int userId = rs.getInt("userId");
                 String orderList = rs.getString("orderList");
-                BigDecimal totalPrice = rs.getBigDecimal("total_price");
+                int totalPrice = rs.getInt("total_price");
                 String products = rs.getString("products");
 
                 Order order = new Order(orderId, userId, orderList, totalPrice);
