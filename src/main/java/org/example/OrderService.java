@@ -45,6 +45,7 @@ public class OrderService {
                 totalPrice += (price * quantity);
 
 
+
                 order = new Order(id_user,getProductNames(products),totalPrice);
             }
 
