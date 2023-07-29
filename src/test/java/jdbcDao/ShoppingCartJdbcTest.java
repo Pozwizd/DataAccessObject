@@ -199,6 +199,7 @@ public class ShoppingCartJdbcTest {
             //=====================================================================================================================
             shoppingCartJdbcDao.removeProductFromCart(shoppingCart);
 
+
             stmt = connection.prepareStatement("DELETE FROM users");
             stmt.executeUpdate();
             stmt.close();
@@ -254,6 +255,9 @@ public class ShoppingCartJdbcTest {
         ShoppingCart shoppingCart = new ShoppingCart(1,1,4);
         ShoppingCart shoppingCart2 = new ShoppingCart(1,2,1);
 
+        ShoppingCart shoppingCartUser2 = new ShoppingCart(1,1,4);
+        ShoppingCart shoppingCartUser2_2 = new ShoppingCart(1,2,1);
+
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO users (id, username, password, email, phone_number) VALUES (?, ?, ?, ?, ?)");
@@ -292,6 +296,16 @@ public class ShoppingCartJdbcTest {
             stmt.setInt(1, shoppingCart2.getUserId());
             stmt.setInt(2, shoppingCart2.getProductId());
             stmt.setInt(3, shoppingCart2.getQuantity());
+            stmt.executeUpdate();
+
+            stmt.setInt(1, shoppingCartUser2.getUserId());
+            stmt.setInt(2, shoppingCartUser2.getProductId());
+            stmt.setInt(3, shoppingCartUser2.getQuantity());
+            stmt.executeUpdate();
+
+            stmt.setInt(1, shoppingCartUser2_2.getUserId());
+            stmt.setInt(2, shoppingCartUser2_2.getProductId());
+            stmt.setInt(3, shoppingCartUser2_2.getQuantity());
             stmt.executeUpdate();
             stmt.close();
             //=====================================================================================================================
@@ -344,6 +358,12 @@ public class ShoppingCartJdbcTest {
                 "user1@example.com",
                 "123456");
 
+        User user2 = new User(2,
+                "user2",
+                "userPassword2",
+                "user2@example.com",
+                "654321");
+
         Product product = new Product(1,
                 "AMD Ryzen 9 5950X",
                 "16-Core 3.4 GHz CPU",
@@ -357,7 +377,9 @@ public class ShoppingCartJdbcTest {
                 12);
 
         ShoppingCart shoppingCart = new ShoppingCart(1,1,4);
-        ShoppingCart shoppingCart2 = new ShoppingCart(1,2,1);
+        ShoppingCart shoppingCart2 = new ShoppingCart(2,2,1);
+
+
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
@@ -368,6 +390,14 @@ public class ShoppingCartJdbcTest {
             stmt.setString(4, user.getEmail());
             stmt.setString(5, user.getPhoneNumber());
             stmt.executeUpdate();
+
+            stmt.setInt(1, user2.getId());
+            stmt.setString(2, user2.getUsername());
+            stmt.setString(3, user2.getPassword());
+            stmt.setString(4, user2.getEmail());
+            stmt.setString(5, user2.getPhoneNumber());
+            stmt.executeUpdate();
+
             stmt.close();
             //=====================================================================================================================
             stmt = connection.prepareStatement(
@@ -399,17 +429,32 @@ public class ShoppingCartJdbcTest {
             stmt.setInt(3, shoppingCart2.getQuantity());
             stmt.executeUpdate();
             stmt.close();
-            //=====================================================================================================================
-
-            List<ShoppingCart> userProducts = shoppingCartJdbcDao.getUserCartProducts(1);
-
-            assertEquals(userProducts.remove(1).getProductId(), shoppingCart2.getProductId());
-            assertEquals(userProducts.remove(0).getProductId(), shoppingCart.getProductId());
 
 
             //=====================================================================================================================
+
 
             shoppingCartJdbcDao.clearUserCart(1);
+
+
+            stmt = connection.prepareStatement(
+                    "SELECT * from shopping_cart where user_id = ? ");
+            stmt.setInt(1, 2);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int id_user = rs.getInt("user_id");
+                int product_id = rs.getInt("product_id");
+                int quantity = rs.getInt("quantity");
+
+                ShoppingCart actualShoppingCart = new ShoppingCart(id_user,product_id,quantity);
+
+                assertEquals(user2.getId(), actualShoppingCart.getUserId());
+            }
+            rs.close();
+            stmt.close();
+
+
 
             stmt = connection.prepareStatement("DELETE FROM users");
             stmt.executeUpdate();
@@ -440,12 +485,6 @@ public class ShoppingCartJdbcTest {
             throw new RuntimeException("Ошибка добавления пользователя", e);
         }
 
-
-
-
-
-
     }
-
 
 }

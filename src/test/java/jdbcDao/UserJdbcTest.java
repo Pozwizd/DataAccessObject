@@ -40,7 +40,7 @@ public class UserJdbcTest {
 
         userDao.createUser(extentedUser);
 
-        logger.info("Пользователь успешно создан");
+
         try(Connection connection = ConnectionPool.getConnection()) {
 
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE id=?");
@@ -60,6 +60,7 @@ public class UserJdbcTest {
                         email,
                         phoneNumber);
                 assertEquals(extentedUser.getUsername(), actualUser.getUsername());
+                logger.info("Пользователь успешно создан");
             }
             rs.close();
             stmt.close();

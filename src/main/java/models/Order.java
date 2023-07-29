@@ -26,20 +26,19 @@ public class Order {
     @Column
     private String orderList;
     @Column
-    private BigDecimal totalPrice;
+    private int totalPrice;
 
     public Order() {}
 
-    public Order(int orderId, int userId, String orderList, BigDecimal totalPrice) {
+    public Order(int orderId, int userId, String orderList, int totalPrice) {
         this.orderId = orderId;
         this.userId = userId;
         this.orderList = orderList;
         this.totalPrice = totalPrice;
     }
 
-    public Order(int userId, String orderList, BigDecimal totalPrice) {
+    public Order(int userId, String orderList, int totalPrice) {
         this.userId = userId;
-
         this.orderList = orderList;
         this.totalPrice = totalPrice;
     }
