@@ -5,7 +5,6 @@ import dao.ProductDao;
 import models.Product;
 import utils.ConnectionPool;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,10 +15,28 @@ import java.util.List;
 
 
 
-public class ProductJdbcDAO implements ProductDao {
+public class ProductJdbcDao implements ProductDao {
 
-    private static final String SQL_GET_ALL = "SELECT * FROM product";
+    @Override
+    public void createProduct(Product product) {
 
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO product (id, product_name, description, price, quantity) VALUES (?, ?, ?, ?, ?)");
+
+            stmt.setInt(1, product.getId());
+            stmt.setString(2, product.getProductName());
+            stmt.setString(3, product.getDescription());
+            stmt.setDouble(4, product.getPrice());
+            stmt.setInt(5, product.getQuantity());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка добавления пользователя", e);
+        }
+
+    }
 
     @Override
     public List<Product> getAllProducts() {
@@ -28,7 +45,7 @@ public class ProductJdbcDAO implements ProductDao {
 
 
         try(Connection connection = ConnectionPool.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement(SQL_GET_ALL);
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM product");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -45,6 +62,31 @@ public class ProductJdbcDAO implements ProductDao {
             System.out.println("Ошибка получения пользователей");
         }
         return products;
+    }
+
+
+
+
+
+
+    @Override
+    public void updateProduct(Product product) {
+
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE product SET product_name = ? , description = ?, price = ?, quantity = ? WHERE id = ?");
+
+            stmt.setString(1, product.getProductName());
+            stmt.setString(2, product.getDescription());
+            stmt.setDouble(3, product.getPrice());
+            stmt.setInt(4, product.getQuantity());
+            stmt.setInt(5, product.getId());
+            stmt.executeUpdate();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка добавления пользователя", e);
+        }
     }
 
     @Override
@@ -76,47 +118,6 @@ public class ProductJdbcDAO implements ProductDao {
         }
 
         return product;
-    }
-
-
-    @Override
-    public void createProduct(Product product) {
-
-        Connection conn = null;
-
-        try(Connection connection = ConnectionPool.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement(
-                    "INSERT INTO product (product_name, description, price, quantity) VALUES (?, ?, ?, ?)");
-
-            stmt.setString(1, product.getProductName());
-            stmt.setString(2, product.getDescription());
-            stmt.setDouble(3, product.getPrice());
-            stmt.setInt(4, product.getQuantity());
-
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
-        }
-
-    }
-
-    @Override
-    public void updateProduct(Product product) {
-
-        try(Connection connection = ConnectionPool.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE product SET product_name = ? , description = ?, price = ?, quantity = ? WHERE id = ?");
-
-            stmt.setString(1, product.getProductName());
-            stmt.setString(2, product.getDescription());
-            stmt.setDouble(3, product.getPrice());
-            stmt.setInt(4, product.getQuantity());
-            stmt.setInt(5, product.getId());
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
-        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import dao.OrderDao;
 import dao.ShoppingCartDao;
 import models.Order;
 import models.Product;
+import models.ShoppingCart;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,17 +17,17 @@ public class OrderService {
 
     public void makeOrder(int userId) {
 
-        List<Product> products = cartDao.getUserCartProducts(userId);
-
-        String orderList = getProductNames(products);
-
-        BigDecimal totalPrice = BigDecimal.valueOf(calculateTotalSum(products));
-
-        Order order = new Order(userId, orderList, totalPrice);
-
-        orderDao.createOrder(order);
-
-        cartDao.clearUserCart(userId);
+//        List<ShoppingCart> products = cartDao.getUserCartProducts(userId);
+//
+//        String orderList = getProductNames();
+//
+//        BigDecimal totalPrice = BigDecimal.valueOf(calculateTotalSum(products));
+//
+//        Order order = new Order(userId, orderList, totalPrice);
+//
+//        orderDao.createOrder(order);
+//
+//        cartDao.clearUserCart(userId);
 
     }
 

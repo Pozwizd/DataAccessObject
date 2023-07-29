@@ -1,12 +1,31 @@
 package models;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Setter
+@Getter
+@Entity
 public class Order {
+
+    @Id
+    @GeneratedValue
     private int orderId;
+
+    @Column(name="user_id")
     private int userId;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
+    @Column
     private String orderList;
+    @Column
     private BigDecimal totalPrice;
 
     public Order() {}
@@ -25,36 +44,4 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-
-    public String getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(String orderList) {
-        this.orderList = orderList;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 }

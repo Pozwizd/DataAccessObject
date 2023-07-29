@@ -14,21 +14,20 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO user_details (user_id, first_name, last_name, date_of_birth, address) " +
+                    "INSERT INTO user_details (first_name, last_name, date_of_birth, address, user_id) " +
                             "VALUES (?, ?, ?, ?, ?)");
 
-            stmt.setInt(1, userId);
-            stmt.setString(2, details.getFirstName());
-            stmt.setString(3, details.getLastName());
-            stmt.setDate(4, details.getDateOfBirth());
-            stmt.setString(5, details.getAddress());
+            stmt.setString(1, details.getFirstName());
+            stmt.setString(2, details.getLastName());
+            stmt.setDate(3, details.getDateOfBirth());
+            stmt.setString(4, details.getAddress());
+            stmt.setInt(5, userId);
 
             stmt.executeUpdate();
+            stmt.close();
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка создания user details", e);
-        } finally {
-
         }
     }
 
@@ -46,16 +45,15 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
                 String gender = rs.getString("gender");
-                Date dateOfBirth = rs.getDate("dateOfBirth");
+                Date dateOfBirth = rs.getDate("date_Of_birth");
                 String address = rs.getString("address");
                 userDetails = new UserDetails(firstName, lastName, gender, dateOfBirth, address);
             }
-
+            rs.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         return userDetails;
     }
 
@@ -73,9 +71,8 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
             stmt.setDate(3, userDetails.getDateOfBirth());
             stmt.setString(4, userDetails.getAddress());
             stmt.setInt(5, userId);
-
             stmt.executeUpdate();
-
+            stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка обновления деталей пользователя", e);
         }

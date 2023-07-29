@@ -30,8 +30,7 @@ public class UserDaoJdbc implements UserDao {
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO users (username, password, email, phone_number) VALUES (?, ?, ?, ?)");
-
+                    "INSERT INTO users ( username, password, email, phone_number) VALUES (?, ?, ?, ?)");
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
@@ -41,8 +40,6 @@ public class UserDaoJdbc implements UserDao {
             stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка добавления пользователя", e);
-        } finally {
-
         }
 
     }
@@ -86,20 +83,19 @@ public class UserDaoJdbc implements UserDao {
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE users SET username = ?, password = ?, email = ?, phone_number = ? WHERE id = ?");
+                    "UPDATE users SET id = ?, username = ?, password = ?, email = ?, phone_number = ? WHERE id = ?");
 
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword());
-            stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getPhoneNumber());
-            stmt.setInt(5, user.getId());
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getPassword());
+            stmt.setString(4, user.getEmail());
+            stmt.setString(5, user.getPhoneNumber());
+            stmt.setInt(6, user.getId());
             stmt.executeUpdate();
             stmt.close();
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка добавления пользователя", e);
-        } finally {
-
         }
 
     }
@@ -131,8 +127,6 @@ public class UserDaoJdbc implements UserDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
         }
         return users;
     }
@@ -153,8 +147,6 @@ public class UserDaoJdbc implements UserDao {
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка удаления пользователя", e);
-        } finally {
-
         }
     }
 

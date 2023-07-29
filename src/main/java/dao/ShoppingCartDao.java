@@ -3,17 +3,16 @@ package dao;
 import models.Product;
 import models.ShoppingCart;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface ShoppingCartDao {
 
 
-    void addProductToCart(int userId, int productId);
+    void addProductToCart(ShoppingCart shoppingCart);
 
-    void removeProductFromCart(int userId, int productId);
+    void removeProductFromCart(ShoppingCart shoppingCart);
 
-    List<Product> getUserCartProducts(int userId);
+    List<ShoppingCart> getUserCartProducts(int userId);
 
     void clearUserCart(int userId);
 

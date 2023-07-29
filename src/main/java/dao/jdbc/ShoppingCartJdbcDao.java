@@ -3,37 +3,44 @@ package dao.jdbc;
 
 import dao.ShoppingCartDao;
 import models.Product;
+import models.ShoppingCart;
+import utils.ConnectionPool;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import utils.ConnectionPool;
-import java.sql.*;
 
 
 public class ShoppingCartJdbcDao implements ShoppingCartDao {
 
-
-    public void addProductToCart(int userId, int productId) {
-
+    @Override
+    public void addProductToCart(ShoppingCart shoppingCart) {
 
         try(Connection connection = ConnectionPool.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO shop.shopping_cart (user_id, product_id) VALUES (?, ?)");
-            stmt.setInt(1, userId);
-            stmt.setInt(2, productId);
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO shopping_cart (user_id, product_id, quantity) VALUES (?, ?, ?)");
+            stmt.setInt(1, shoppingCart.getUserId());
+            stmt.setInt(2, shoppingCart.getProductId());
+            stmt.setInt(3, shoppingCart.getQuantity());
             stmt.executeUpdate();
+            stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void removeProductFromCart(int userId, int productId) {
+    public void removeProductFromCart(ShoppingCart shoppingCart) {
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
                     "DELETE FROM shop.shopping_cart " +
                             "WHERE user_id = ? AND product_id = ?");
-            stmt.setInt(1, userId);
-            stmt.setInt(2, productId);
+            stmt.setInt(1, shoppingCart.getUserId());
+            stmt.setInt(2, shoppingCart.getProductId());
 
             stmt.executeUpdate();
 
@@ -43,35 +50,33 @@ public class ShoppingCartJdbcDao implements ShoppingCartDao {
     }
 
     @Override
-    public List<Product> getUserCartProducts(int userId) {
+    public List<ShoppingCart> getUserCartProducts(int userId) {
 
-        List<Product> userProducts = new ArrayList<>();
+        List<ShoppingCart> shoppingCarts = new ArrayList<>();
+
+
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT p.* FROM shop.shopping_cart c " +
-                    "JOIN product p ON c.product_id = p.id " +
-                    "WHERE c.user_id = ?");
+                    "SELECT * FROM shopping_cart WHERE user_id = ?");
             stmt.setInt(1, userId);
 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String product_name = rs.getString("product_name");
-                String description = rs.getString("description");
-                double price = rs.getDouble("price");
+                int user_id = rs.getInt("user_id");
+                int product_id = rs.getInt("product_id");
                 int quantity = rs.getInt("quantity");
 
-                Product product = new Product(id, product_name, description, price, quantity);
-                userProducts.add(product);
+                ShoppingCart shoppingCart = new ShoppingCart(user_id, product_id, quantity);
+                shoppingCarts.add(shoppingCart);
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return userProducts;
+        return shoppingCarts;
     }
 
     @Override

@@ -1,13 +1,34 @@
 package models;
 
-import java.sql.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Setter
+@Getter
+@Entity
 public class Product {
+
+    @Id
+    @GeneratedValue
     private int id;
+
+    @Column
     private String productName;
+
+    @Column
     private String description;
+
+    @Column
     private double price;
+
+    @Column
     private int quantity;
+
+    @OneToMany(mappedBy="product")
+    private List<ShoppingCart> shoppingCarts;
 
     public Product() {
     }
@@ -21,50 +42,10 @@ public class Product {
     }
 
     public Product(String productName, String description, double price, int quantity) {
-        this.id = id;
         this.productName = productName;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 }

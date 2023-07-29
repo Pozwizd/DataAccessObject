@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface UserDao {
 
-    List<User> getAllUsers() throws SQLException;
-
-    User getUserById(int id);
-
     void createUser(User user);
 
     void updateUser(User user);
+
+    User getUserById(int id);
+
+    List<User> getAllUsers() throws SQLException;
 
     void deleteUser(User user);
 }
