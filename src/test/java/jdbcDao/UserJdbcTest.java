@@ -27,9 +27,27 @@ public class UserJdbcTest {
     private static final Logger logger = LogManager.getLogger(UserJdbcTest.class);
     UserDaoJdbc userDao = new UserDaoJdbc();
 
+    @AfterEach
+    public void deleteAfterTest(){
+        try(Connection connection = ConnectionPool.getConnection()) {
+
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM users");
+            stmt.executeUpdate();
+            stmt.close();
+
+            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
+            stmt.executeUpdate();
+            stmt.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Test
     public void testCreateUser(){
+
         User extentedUser;
         User actualUser;
         extentedUser = new User(1,
@@ -38,8 +56,11 @@ public class UserJdbcTest {
                 "user1@example.com",
                 "123456");
 
-        userDao.createUser(extentedUser);
 
+        /*
+        Создание пользователя
+         */
+        userDao.createUser(extentedUser);
 
         try(Connection connection = ConnectionPool.getConnection()) {
 
@@ -59,26 +80,18 @@ public class UserJdbcTest {
                         password,
                         email,
                         phoneNumber);
+                /* Проверка созданного пользователя */
                 assertEquals(extentedUser.getUsername(), actualUser.getUsername());
                 logger.info("Пользователь успешно создан");
             }
             rs.close();
             stmt.close();
 
-            stmt = connection.prepareStatement("DELETE FROM users");
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
-            stmt.executeUpdate();
-            stmt.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
-
-
 
     @Test
     public void testGetUserById(){
@@ -100,27 +113,14 @@ public class UserJdbcTest {
             stmt.setString(5, extentedUser.getPhoneNumber());
             stmt.executeUpdate();
             stmt.close();
-
+            /* Проверка полученного пользователя */
             User actualUser = userDao.getUserById(1);
+            logger.info("Пользователь успешно получен по id");
             assertEquals(extentedUser.getUsername(), actualUser.getUsername());
-
-            stmt = connection.prepareStatement("DELETE FROM users");
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
-            stmt.executeUpdate();
-            stmt.close();
-
-
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            throw new RuntimeException(e);
         }
-        logger.info("Пользователь успешно создан");
-
     }
-
-
 
     @Test
     public void testUpdateUser(){
@@ -136,7 +136,6 @@ public class UserJdbcTest {
                 "wed436t34grh437tre34tg524",
                 "Roman@example.com",
                 "Roman");
-
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
@@ -166,36 +165,62 @@ public class UserJdbcTest {
                         password,
                         email,
                         phoneNumber);
+                /* Проверка обновления данных пользователя пользователя */
                 assertEquals(updateExtentedUser.getUsername(), actualUser.getUsername());
+                logger.info("Пользователь успешно обновлен");
             }
             rs.close();
             stmt.close();
 
-            stmt = connection.prepareStatement("DELETE FROM users");
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
-            stmt.executeUpdate();
-            stmt.close();
-
-
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            throw new RuntimeException(e);
         }
-        logger.info("Пользователь успешно создан");
     }
-
-
 
     @Test
     public void testDeleteUser(){
-        List<User> users = userDao.getAllUsers();
-        for (User user: users) {
+        User user = new User(1,
+            "user1",
+            "userPassword1",
+            "user1@example.com",
+            "123456");
+
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO users (id, username, password, email, phone_number) VALUES (?, ?, ?, ?, ?)");
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getPassword());
+            stmt.setString(4, user.getEmail());
+            stmt.setString(5, user.getPhoneNumber());
+            stmt.executeUpdate();
+            stmt.close();
+
             userDao.deleteUser(user);
-        }
-        for (int i = 0; i < 10; i++){
-            assertNull(userDao.getUserById(i));
+
+            stmt = connection.prepareStatement("SELECT * FROM users");
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int id_user = rs.getInt("id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phone_number");
+                User actualUser = new User(id_user,
+                        username,
+                        password,
+                        email,
+                        phoneNumber);
+                /* Проверка обновления данных пользователя пользователя */
+                assertNull(actualUser);
+                logger.info("Пользователь успешно удален");
+            }
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
     }

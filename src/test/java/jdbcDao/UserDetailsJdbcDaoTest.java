@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import utils.ConnectionPool;
 
 import java.sql.*;
@@ -21,15 +23,13 @@ public class UserDetailsJdbcDaoTest {
     UserDaoJdbc userDao = new UserDaoJdbc();
     User testUser;
 
-    @Test
-    public void testCreateUserDetails() {
+    @Before
+    public void createUserBeforeUserDetailsTest(){
         User extentedUser = new User(1,
                 "user1",
                 "userPassword1",
                 "user1@example.com",
                 "123456");
-        UserDetails userDetails = new UserDetails("Іван", "Петренко", "male", new Date(1980,1,1), "Київ, вул. Шевченка 10");
-
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO users (id, username, password, email, phone_number) VALUES (?, ?, ?, ?, ?)");
@@ -40,9 +40,39 @@ public class UserDetailsJdbcDaoTest {
             stmt.setString(5, extentedUser.getPhoneNumber());
             stmt.executeUpdate();
             stmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @AfterEach
+    public void allDeleteAfterTest(){
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM users");
+            stmt.executeUpdate();
+            stmt.close();
+
+            stmt = connection.prepareStatement("DELETE FROM user_details");
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+    @Test
+    public void testCreateUserDetails() {
+
+        UserDetails userDetails = new UserDetails("Іван", "Петренко", "male", new Date(1980,1,1), "Київ, вул. Шевченка 10");
+
+        try(Connection connection = ConnectionPool.getConnection()) {
+
             UserDetailsDao.createUserDetails(1, userDetails);
 
-            stmt = connection.prepareStatement("SELECT * FROM user_details WHERE user_id=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_details WHERE user_id=?");
             stmt.setInt(1, 1);
 
             ResultSet rs = stmt.executeQuery();
@@ -59,29 +89,25 @@ public class UserDetailsJdbcDaoTest {
                         gender,
                         dateOfBirth,
                         address);
+                /* Проверка полученного пользователя */
                 assertEquals(userDetails.getUserId(), actualUserDetails.getUserId());
                 assertEquals(userDetails.getFirstName(), actualUserDetails.getFirstName());
+                assertEquals(userDetails.getGender(), actualUserDetails.getGender());
+                assertEquals(userDetails.getDateOfBirth(), actualUserDetails.getDateOfBirth());
+                assertEquals(userDetails.getAddress(), actualUserDetails.getAddress());
+                logger.info("UserDetails successfully created");
             }
             rs.close();
             stmt.close();
 
-            stmt = connection.prepareStatement("DELETE FROM users");
-            stmt.executeUpdate();
-            stmt.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-
     }
 
     @Test
     public void testGetUserDetailsById() {
-        User extentedUser = new User(1,
-                "user1",
-                "userPassword1",
-                "user1@example.com",
-                "123456");
+
         UserDetails userDetails = new UserDetails("Іван",
                 "Петренко",
                 "male",
@@ -91,16 +117,6 @@ public class UserDetailsJdbcDaoTest {
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO users (id, username, password, email, phone_number) VALUES (?, ?, ?, ?, ?)");
-            stmt.setInt(1, extentedUser.getId());
-            stmt.setString(2, extentedUser.getUsername());
-            stmt.setString(3, extentedUser.getPassword());
-            stmt.setString(4, extentedUser.getEmail());
-            stmt.setString(5, extentedUser.getPhoneNumber());
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt = connection.prepareStatement(
                     "INSERT INTO user_details (first_name, last_name, date_of_birth, address, user_id) " +
                             "VALUES (?, ?, ?, ?, ?)");
 
