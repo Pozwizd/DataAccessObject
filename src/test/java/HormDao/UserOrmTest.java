@@ -2,11 +2,11 @@ package HormDao;
 
 import dao.hibernate.UserOrmDao;
 import models.User;
-import org.hibernate.*;
+import org.apache.logging.log4j.LogManager;
+import org.hibernate.SessionFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import utils.HibernateUtil;
-import org.apache.logging.log4j.LogManager;
 
 
 public class UserOrmTest {

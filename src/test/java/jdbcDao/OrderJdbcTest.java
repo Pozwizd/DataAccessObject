@@ -1,23 +1,8 @@
 package jdbcDao;
 
 import dao.jdbc.OrderJdbcDao;
-import models.Order;
-import models.Product;
-import models.ShoppingCart;
-import models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Test;
-import utils.ConnectionPool;
-
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OrderJdbcTest {
     private static final Logger logger = LogManager.getLogger(OrderJdbcTest.class);

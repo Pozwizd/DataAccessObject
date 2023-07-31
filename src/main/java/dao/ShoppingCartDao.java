@@ -1,6 +1,5 @@
 package dao;
 
-import models.Product;
 import models.ShoppingCart;
 
 import java.util.List;

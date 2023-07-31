@@ -2,7 +2,9 @@ package dao.hibernate;
 
 import dao.UserDao;
 import models.User;
-import org.hibernate.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.sql.SQLException;
 import java.util.List;

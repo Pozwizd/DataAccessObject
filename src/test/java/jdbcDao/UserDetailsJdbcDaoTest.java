@@ -6,10 +6,10 @@ import models.User;
 import models.UserDetails;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import utils.ConnectionPool;
 
 import java.sql.*;
@@ -23,7 +23,7 @@ public class UserDetailsJdbcDaoTest {
     UserDaoJdbc userDao = new UserDaoJdbc();
     User testUser;
 
-    @Before
+    @BeforeEach
     public void createUserBeforeUserDetailsTest(){
         User extentedUser = new User(1,
                 "user1",
@@ -40,26 +40,21 @@ public class UserDetailsJdbcDaoTest {
             stmt.setString(5, extentedUser.getPhoneNumber());
             stmt.executeUpdate();
             stmt.close();
+            logger.info("Пользователь для теста успешно добавлен");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @AfterEach
-    public void allDeleteAfterTest(){
+    public void DeleteAfterTest(){
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM users");
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt = connection.prepareStatement("DELETE FROM user_details");
             stmt.executeUpdate();
             stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
 
@@ -132,10 +127,6 @@ public class UserDetailsJdbcDaoTest {
             assertEquals(userDetails.getFirstName(), actualUserDetails.getFirstName());
             assertEquals(userDetails.getLastName(), actualUserDetails.getLastName());
 
-            stmt = connection.prepareStatement("DELETE FROM users");
-            stmt.executeUpdate();
-            stmt.close();
-
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка создания user details", e);
         }
@@ -166,16 +157,6 @@ public class UserDetailsJdbcDaoTest {
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO users (id, username, password, email, phone_number) VALUES (?, ?, ?, ?, ?)");
-            stmt.setInt(1, extentedUser.getId());
-            stmt.setString(2, extentedUser.getUsername());
-            stmt.setString(3, extentedUser.getPassword());
-            stmt.setString(4, extentedUser.getEmail());
-            stmt.setString(5, extentedUser.getPhoneNumber());
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt = connection.prepareStatement(
                     "INSERT INTO user_details (first_name, last_name, date_of_birth, address, user_id) " +
                             "VALUES (?, ?, ?, ?, ?)");
 
@@ -209,11 +190,6 @@ public class UserDetailsJdbcDaoTest {
                 assertEquals(updateUserDetails.getAddress(), actualUserDetails.getAddress());
                 assertEquals(updateUserDetails.getDateOfBirth(), actualUserDetails.getDateOfBirth());
             }
-
-            stmt = connection.prepareStatement("DELETE FROM users");
-            stmt.executeUpdate();
-            stmt.close();
-
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка создания user details", e);
         }

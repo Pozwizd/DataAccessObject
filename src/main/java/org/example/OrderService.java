@@ -4,10 +4,8 @@ package org.example;
 import dao.OrderDao;
 import dao.ShoppingCartDao;
 import models.Order;
-import models.Product;
 import utils.ConnectionPool;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

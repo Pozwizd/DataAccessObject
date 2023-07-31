@@ -1,13 +1,9 @@
 package jdbcDao;
 
-import dao.ProductDao;
 import dao.jdbc.ProductJdbcDao;
 import models.Product;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import utils.ConnectionPool;
 
