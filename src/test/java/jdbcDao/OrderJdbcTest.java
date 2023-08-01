@@ -252,12 +252,12 @@ public class OrderJdbcTest {
         Order order2 = new Order(2,
                 2,
                 "AMD Ryzen 5 5950X * 5, Intel Core i9-11900K * 2",
-                4695.00);
+                5000);
 
         Order order3 = new Order(3,
                 1,
                 "AMD Ryzen 7 5950X * 1, Intel Core i9-11900K * 1",
-                4695.00);
+                6000);
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
@@ -268,14 +268,14 @@ public class OrderJdbcTest {
             stmt.setString(3, order.getOrderList());
             stmt.setDouble(4, order.getTotalPrice());
             stmt.executeUpdate();
-            stmt.close();
+
 
             stmt.setInt(1, order2.getOrderId());
             stmt.setInt(2, order2.getUserId());
             stmt.setString(3, order2.getOrderList());
             stmt.setDouble(4, order2.getTotalPrice());
             stmt.executeUpdate();
-            stmt.close();
+
 
             stmt.setInt(1, order3.getOrderId());
             stmt.setInt(2, order3.getUserId());
@@ -283,8 +283,6 @@ public class OrderJdbcTest {
             stmt.setDouble(4, order3.getTotalPrice());
             stmt.executeUpdate();
             stmt.close();
-
-
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка добавления заказа", e);
@@ -300,10 +298,6 @@ public class OrderJdbcTest {
             assertEquals(orders.get(i).getTotalPrice(), extendOrders.get(i).getTotalPrice());
         }
         logger.info("Order has successfully been created");
-
-
-
-
     }
 
 

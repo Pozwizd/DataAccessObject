@@ -76,13 +76,12 @@ public class OrderJdbcDao implements OrderDao {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int orderId = rs.getInt("id");
-                int userId = rs.getInt("userId");
-                String orderList = rs.getString("orderList");
+                int order_Id = rs.getInt("order_id");
+                int userId = rs.getInt("user_id");
+                String orderList = rs.getString("order_list");
                 int totalPrice = rs.getInt("total_price");
-                String products = rs.getString("products");
 
-                Order order = new Order(orderId, userId, orderList, totalPrice);
+                Order order = new Order(order_Id, userId, orderList, totalPrice);
                 allOrders.add(order);
             }
 
