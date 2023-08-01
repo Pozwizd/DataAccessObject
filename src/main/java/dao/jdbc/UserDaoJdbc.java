@@ -95,7 +95,7 @@ public class UserDaoJdbc implements UserDao {
             stmt.close();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            throw new RuntimeException("Ошибка обновления пользователя", e);
         }
 
     }
@@ -126,7 +126,7 @@ public class UserDaoJdbc implements UserDao {
             stmt.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Ошибка получения всех пользователей", e);
         }
         return users;
     }

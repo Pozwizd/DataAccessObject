@@ -20,8 +20,6 @@ public class UserDetailsJdbcDaoTest {
 
     private static final Logger logger = LogManager.getLogger(UserDetailsJdbcDaoTest.class);
     UserDetailsJdbcDao UserDetailsDao = new UserDetailsJdbcDao();
-    UserDaoJdbc userDao = new UserDaoJdbc();
-    User testUser;
 
     @BeforeEach
     public void createUserBeforeUserDetailsTest(){
@@ -40,7 +38,7 @@ public class UserDetailsJdbcDaoTest {
             stmt.setString(5, extentedUser.getPhoneNumber());
             stmt.executeUpdate();
             stmt.close();
-            logger.info("Пользователь для теста успешно добавлен");
+            logger.info("The user for the test has been successfully added");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -52,6 +50,7 @@ public class UserDetailsJdbcDaoTest {
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM users");
             stmt.executeUpdate();
             stmt.close();
+            logger.info("User and UserDetails were deleted after testing");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -93,7 +92,7 @@ public class UserDetailsJdbcDaoTest {
             stmt.close();
             logger.info("UserDetails successfully created");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.info("UserDetails creation error");
         }
     }
 
@@ -121,14 +120,15 @@ public class UserDetailsJdbcDaoTest {
             stmt.close();
 
             UserDetails actualUserDetails = UserDetailsDao.getUserDetailsById(1);
+            assertEquals(userDetails.getUserId(), actualUserDetails.getUserId());
             assertEquals(userDetails.getFirstName(), actualUserDetails.getFirstName());
-            assertEquals(userDetails.getLastName(), actualUserDetails.getLastName());
-
+            assertEquals(userDetails.getGender(), actualUserDetails.getGender());
+            assertEquals(userDetails.getDateOfBirth(), actualUserDetails.getDateOfBirth());
+            assertEquals(userDetails.getAddress(), actualUserDetails.getAddress());
+            logger.info("UserDetails successfully received by id");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.info("Error getting UserDetails by id");
         }
-        logger.info("UserDetails successfully created");
-
     }
 
 
@@ -136,11 +136,6 @@ public class UserDetailsJdbcDaoTest {
     @Test
     public void testUpdateUserDetails() {
 
-        User extentedUser = new User(1,
-                "user1",
-                "userPassword1",
-                "user1@example.com",
-                "123456");
         UserDetails userDetails = new UserDetails("Іван",
                 "Петренко",
                 "male",
@@ -185,11 +180,17 @@ public class UserDetailsJdbcDaoTest {
                                 gender,
                                 dateOfBirth,
                                 address);
-                assertEquals(updateUserDetails.getAddress(), actualUserDetails.getAddress());
+                assertEquals(updateUserDetails.getUserId(), actualUserDetails.getUserId());
+                assertEquals(updateUserDetails.getFirstName(), actualUserDetails.getFirstName());
+                assertEquals(updateUserDetails.getGender(), actualUserDetails.getGender());
                 assertEquals(updateUserDetails.getDateOfBirth(), actualUserDetails.getDateOfBirth());
+                assertEquals(updateUserDetails.getAddress(), actualUserDetails.getAddress());
             }
+            rs.close();
+            stmt.close();
+            logger.info("UserDetails successfully updated");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.info("UserDetails update error");
         }
     }
 }

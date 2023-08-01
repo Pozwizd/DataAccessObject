@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderService {
@@ -19,10 +20,11 @@ public class OrderService {
 
     private Order order;
 
-    List<String> products;
+
 
     public Order makeOrder(int userId) {
-
+        List<String> products = new ArrayList<>();
+        List<Integer> quantities = new ArrayList<>();
         try(Connection connection = ConnectionPool.getConnection()) {
 
             PreparedStatement stmt = connection.prepareStatement(
@@ -31,20 +33,18 @@ public class OrderService {
                             "JOIN product p ON sc.product_id = p.id " +
                             "WHERE user_id = ?");
             stmt.setInt(1, userId);
-
+            int totalPrice = 0;
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            while(rs.next()) {
                 int id_user = rs.getInt("user_id");
                 String product_name = rs.getString("product_name");
                 products.add(product_name);
                 int price = rs.getInt("price");
                 int quantity = rs.getInt("quantity");
-                int totalPrice = 0;
+                quantities.add(quantity);
                 totalPrice += (price * quantity);
 
-
-
-                order = new Order(id_user,getProductNames(products),totalPrice);
+                order = new Order(id_user,getProductNames(products, quantities),totalPrice);
             }
 
             rs.close();
@@ -58,14 +58,14 @@ public class OrderService {
 
     }
 
-    private String getProductNames(List<String> products) {
+    private String getProductNames(List<String> products, List<Integer> quantity) {
 
         StringBuilder builder = new StringBuilder();
 
-        for(String product : products) {
-            builder.append(product);
+        for (int i = 0; i < products.size(); i++){
+            builder.append(products.get(i));
             builder.append(" * ");
-            builder.append(product);
+            builder.append(quantity.get(i));
             builder.append(", ");
         }
 

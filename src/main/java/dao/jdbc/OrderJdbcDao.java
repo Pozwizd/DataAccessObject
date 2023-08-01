@@ -23,13 +23,12 @@ public class OrderJdbcDao implements OrderDao {
 
             stmt.setInt(1, order.getUserId());
             stmt.setString(2, order.getOrderList());
-            stmt.setInt(3, order.getTotalPrice());
-
-
+            stmt.setDouble(3, order.getTotalPrice());
             stmt.executeUpdate();
+            stmt.close();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            throw new RuntimeException("Ошибка добавления заказа", e);
         }
 
     }
@@ -47,18 +46,19 @@ public class OrderJdbcDao implements OrderDao {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int orderId = rs.getInt("id");
-                userId = rs.getInt("userId");
-                String orderList = rs.getString("orderList");
+                int order_Id = rs.getInt("order_id");
+                userId = rs.getInt("user_id");
+                String orderList = rs.getString("order_list");
                 int totalPrice = rs.getInt("total_price");
-                String products = rs.getString("products");
 
-                Order order = new Order(orderId, userId, orderList, totalPrice);
+                Order order = new Order(order_Id, userId, orderList, totalPrice);
                 userOrders.add(order);
             }
+            rs.close();
+            stmt.close();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Ошибка получение заказов пользователя", e);
         }
 
         return userOrders;
@@ -87,7 +87,7 @@ public class OrderJdbcDao implements OrderDao {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Ошибка получение всех заказов", e);
         }
 
         return allOrders;

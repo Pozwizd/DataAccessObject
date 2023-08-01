@@ -33,7 +33,7 @@ public class ProductJdbcDao implements ProductDao {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            throw new RuntimeException("Ошибка создания продукта", e);
         }
 
     }
@@ -59,7 +59,7 @@ public class ProductJdbcDao implements ProductDao {
                 products.add(product);
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка получения пользователей");
+            System.out.println("Ошибка получения всех продуктов");
         }
         return products;
     }
@@ -85,7 +85,7 @@ public class ProductJdbcDao implements ProductDao {
             stmt.close();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            throw new RuntimeException("Ошибка обновления продукта", e);
         }
     }
 
@@ -114,7 +114,7 @@ public class ProductJdbcDao implements ProductDao {
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Ошибка получения продукта по id", e);
         }
 
         return product;
@@ -132,7 +132,7 @@ public class ProductJdbcDao implements ProductDao {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка удаления пользователя", e);
+            throw new RuntimeException("Ошибка удаления продукта", e);
         }
 
     }

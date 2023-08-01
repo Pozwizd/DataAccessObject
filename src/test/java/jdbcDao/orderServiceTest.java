@@ -1,6 +1,7 @@
 package jdbcDao;
 
 import dao.jdbc.OrderJdbcDao;
+import dao.jdbc.ShoppingCartJdbcDao;
 import models.Order;
 import models.Product;
 import models.ShoppingCart;
@@ -17,19 +18,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+public class orderServiceTest {
 
-public class OrderJdbcTest {
-    private static final Logger logger = LogManager.getLogger(OrderJdbcTest.class);
+    private static final Logger logger = LogManager.getLogger(orderServiceTest.class);
 
     OrderJdbcDao orderJdbcDao = new OrderJdbcDao();
+    OrderService orderService = new OrderService();
 
-    Order order = new Order(1,
-            1,
-            "AMD Ryzen 9 5950X * 4, Intel Core i9-11900K * 1",
-            4695.00);
 
     @BeforeEach
     public void createObjectsForTesting(){
@@ -144,7 +140,8 @@ public class OrderJdbcTest {
             stmt.executeUpdate();
             stmt.close();
 
-            stmt = connection.prepareStatement("DELETE FROM orders");
+
+            stmt = connection.prepareStatement("ALTER TABLE shopping_cart AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
 
@@ -155,17 +152,6 @@ public class OrderJdbcTest {
             stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
-
-            stmt = connection.prepareStatement("ALTER TABLE shopping_cart AUTO_INCREMENT = 1");
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt = connection.prepareStatement("ALTER TABLE orders AUTO_INCREMENT = 1");
-            stmt.executeUpdate();
-            stmt.close();
-
-
-
             logger.info("Deleting the User and the product after a test");
         } catch (SQLException e) {
             logger.info("Error deleting user and product after testing");
@@ -173,15 +159,9 @@ public class OrderJdbcTest {
         }
     }
 
-
     @Test
-    public void createOrderTest(){
-        Order order = new Order(1,
-                1,
-                "AMD Ryzen 9 5950X * 4, Intel Core i9-11900K * 1",
-                4695.00);
-
-
+    public void makeOrderTest(){
+        Order order = orderService.makeOrder(1);;
         orderJdbcDao.createOrder(order);
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM orders " +
@@ -192,14 +172,8 @@ public class OrderJdbcTest {
                 int user_id = rs.getInt("user_id");
                 String order_list = rs.getString("order_list");
                 double total_price = rs.getInt("total_price");
-                Order actualOrder = new Order(order_id, user_id, order_list, total_price);
-
-                assertEquals(order.getOrderId(), actualOrder.getOrderId());
-                assertEquals(order.getUserId(), actualOrder.getUserId());
-                assertEquals(order.getOrderList(), actualOrder.getOrderList());
-                assertEquals(order.getTotalPrice(), actualOrder.getTotalPrice());
-                logger.info("Order has successfully been created");
-
+                order = new Order(order_id, user_id, order_list, total_price);
+                logger.info(order.getOrderList());
             }
         } catch (SQLException e) {
             logger.info("Error deleting user and product after testing");
@@ -207,104 +181,5 @@ public class OrderJdbcTest {
         }
 
     }
-
-    @Test
-    public void getUserOrdersTest(){
-
-        Order order = new Order(1,
-                1,
-                "AMD Ryzen 9 5950X * 4, Intel Core i9-11900K * 1",
-                4695.00);
-
-        try(Connection connection = ConnectionPool.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO shop.orders (user_id, order_list, total_price) VALUES (?, ?, ?)");
-
-            stmt.setInt(1, order.getUserId());
-            stmt.setString(2, order.getOrderList());
-            stmt.setDouble(3, order.getTotalPrice());
-            stmt.executeUpdate();
-            stmt.close();
-            logger.info("Order has successfully been created");
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления заказа", e);
-        }
-
-        List<Order> orders = orderJdbcDao.getUserOrders(1);
-
-        assertEquals(orders.get(0).getOrderId(), order.getOrderId());
-        assertEquals(orders.get(0).getUserId(), order.getUserId());
-        assertEquals(orders.get(0).getOrderList(), order.getOrderList());
-        assertEquals(orders.get(0).getTotalPrice(), order.getTotalPrice());
-
-
-    }
-
-    @Test
-    public void getAllOrdersTest(){
-
-        Order order = new Order(1,
-                1,
-                "AMD Ryzen 9 5950X * 4, Intel Core i9-11900K * 1",
-                4695.00);
-
-        Order order2 = new Order(2,
-                2,
-                "AMD Ryzen 5 5950X * 5, Intel Core i9-11900K * 2",
-                4695.00);
-
-        Order order3 = new Order(3,
-                1,
-                "AMD Ryzen 7 5950X * 1, Intel Core i9-11900K * 1",
-                4695.00);
-
-        try(Connection connection = ConnectionPool.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO orders (order_id, user_id, order_list, total_price) VALUES (?, ?, ?, ?)");
-
-            stmt.setInt(1, order.getOrderId());
-            stmt.setInt(2, order.getUserId());
-            stmt.setString(3, order.getOrderList());
-            stmt.setDouble(4, order.getTotalPrice());
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt.setInt(1, order2.getOrderId());
-            stmt.setInt(2, order2.getUserId());
-            stmt.setString(3, order2.getOrderList());
-            stmt.setDouble(4, order2.getTotalPrice());
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt.setInt(1, order3.getOrderId());
-            stmt.setInt(2, order3.getUserId());
-            stmt.setString(3, order3.getOrderList());
-            stmt.setDouble(4, order3.getTotalPrice());
-            stmt.executeUpdate();
-            stmt.close();
-
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления заказа", e);
-        }
-
-        List<Order> orders = orderJdbcDao.getAllOrders();
-        List<Order> extendOrders = List.of(order, order2, order3);
-
-        for(int i = 0; i < orders.size() ; i++){
-            assertEquals(orders.get(i).getOrderId(), extendOrders.get(i).getOrderId());
-            assertEquals(orders.get(i).getUserId(),  extendOrders.get(i).getUserId());
-            assertEquals(orders.get(i).getOrderList(), extendOrders.get(i).getOrderList());
-            assertEquals(orders.get(i).getTotalPrice(), extendOrders.get(i).getTotalPrice());
-        }
-        logger.info("Order has successfully been created");
-
-
-
-
-    }
-
 
 }

@@ -27,7 +27,7 @@ public class ShoppingCartJdbcDao implements ShoppingCartDao {
             stmt.executeUpdate();
             stmt.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Ошибка добавления продукта в корзину", e);
         }
     }
 
@@ -72,7 +72,7 @@ public class ShoppingCartJdbcDao implements ShoppingCartDao {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Ошибка получения всех ShoppingCart пользователя", e);
         }
 
         return shoppingCarts;
@@ -88,7 +88,7 @@ public class ShoppingCartJdbcDao implements ShoppingCartDao {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка очистки корзины", e);
+            throw new RuntimeException("Ошибка очистки корзины пользователя", e);
         }
 
     }

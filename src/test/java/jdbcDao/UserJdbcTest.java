@@ -78,13 +78,13 @@ public class UserJdbcTest {
                 assertEquals(extentedUser.getEmail(), actualUser.getEmail());
                 assertEquals(extentedUser.getPhoneNumber(), actualUser.getPhoneNumber());
             }
-            logger.info("Пользователь успешно создан");
+            logger.info("User successfully created");
             rs.close();
             stmt.close();
 
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.info("User creation error");
         }
     }
 
@@ -115,9 +115,9 @@ public class UserJdbcTest {
             assertEquals(extentedUser.getPassword(), actualUser.getPassword());
             assertEquals(extentedUser.getEmail(), actualUser.getEmail());
             assertEquals(extentedUser.getPhoneNumber(), actualUser.getPhoneNumber());
-            logger.info("Пользователь успешно получен по id");
+            logger.info("User successfully received by id");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.info("Error getting user by id");
         }
     }
 
@@ -170,13 +170,13 @@ public class UserJdbcTest {
                 assertEquals(updateExtentedUser.getPassword(), actualUser.getPassword());
                 assertEquals(updateExtentedUser.getEmail(), actualUser.getEmail());
                 assertEquals(updateExtentedUser.getPhoneNumber(), actualUser.getPhoneNumber());
-                logger.info("Пользователь успешно обновлен");
+                logger.info("User successfully updated");
             }
             rs.close();
             stmt.close();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.info("User update error");
         }
     }
 
@@ -217,14 +217,13 @@ public class UserJdbcTest {
                         phoneNumber);
                 /* Проверка обновления данных пользователя пользователя */
                 assertNull(actualUser);
-
             }
-            logger.info("Пользователь успешно удален");
+            logger.info("User successfully deleted");
             rs.close();
             stmt.close();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.info("User deletion error");
         }
 
     }

@@ -52,7 +52,7 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
             rs.close();
             stmt.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Ошибка получения UserDetails по id", e);
         }
         return userDetails;
     }

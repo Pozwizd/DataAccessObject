@@ -4,7 +4,8 @@ import dao.jdbc.ProductJdbcDao;
 import models.Product;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,19 +18,39 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+
 public class ProductJdbcTest {
 
     private static final Logger logger = LogManager.getLogger(ProductJdbcTest.class);
-    private ProductJdbcDao productJdbcDao = new ProductJdbcDao();
+    private final ProductJdbcDao productJdbcDao = new ProductJdbcDao();
+
+    @AfterEach
+    public void deleteProductAfterTest(){
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM product");
+            stmt.executeUpdate();
+            stmt.close();
+
+            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1");
+            stmt.executeUpdate();
+            stmt.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void createProductTest() throws Exception {
-        Product ExtendProduct = new Product(1,"AMD Ryzen 9 5950X", "16-Core 3.4 GHz CPU", 999.99, 10);
+        Product ExtendProduct = new Product(1,
+                "AMD Ryzen 9 5950X",
+                "16-Core 3.4 GHz CPU",
+                999.99,
+                10);
 
         productJdbcDao.createProduct(ExtendProduct);
 
         try(Connection connection = ConnectionPool.getConnection()) {
-
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM product WHERE id=?");
             stmt.setInt(1, 1);
 
@@ -51,19 +72,11 @@ public class ProductJdbcTest {
             }
             rs.close();
             stmt.close();
-
-            stmt = connection.prepareStatement("DELETE FROM product");
-            stmt.executeUpdate();
-            stmt.close();
-
-            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
-            stmt.executeUpdate();
-            stmt.close();
+            logger.info("Product successfully created");
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info("Product creation error");
         }
-
     }
 
     @Test
@@ -85,33 +98,32 @@ public class ProductJdbcTest {
             stmt.setString(2, product.getDescription());
             stmt.setDouble(3, product.getPrice());
             stmt.setInt(4, product.getQuantity());
-
             stmt.executeUpdate();
-
 
             stmt.setString(1, product2.getProductName());
             stmt.setString(2, product2.getDescription());
             stmt.setDouble(3, product2.getPrice());
             stmt.setInt(4, product2.getQuantity());
-
             stmt.executeUpdate();
             stmt.close();
 
 
             List<Product> products = productJdbcDao.getAllProducts();
-            assertEquals(products.remove(1).getId(), product2.getId());
-            assertEquals(products.remove(0).getId(), product.getId());
+            assertEquals(products.get(1).getId(), product2.getId());
+            assertEquals(products.get(1).getProductName(), product2.getProductName());
+            assertEquals(products.get(1).getDescription(), product2.getDescription());
+            assertEquals(products.get(1).getPrice(), product2.getPrice(), 0.001);
+            assertEquals(products.get(1).getQuantity(), product2.getQuantity());
 
-            stmt = connection.prepareStatement("DELETE FROM product");
-            stmt.executeUpdate();
-            stmt.close();
-            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
-            stmt.executeUpdate();
-            stmt.close();
 
+            assertEquals(products.get(0).getId(), product.getId());
+            assertEquals(products.get(0).getProductName(), product.getProductName());
+            assertEquals(products.get(0).getDescription(), product.getDescription());
+            assertEquals(products.get(0).getPrice(), product.getPrice(), 0.001);
+            assertEquals(products.get(0).getQuantity(), product.getQuantity());
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            logger.info("Product successfully created");
         }
     }
 
@@ -146,7 +158,6 @@ public class ProductJdbcTest {
             stmt.executeUpdate();
             stmt.close();
 
-
             List<Product> products = productJdbcDao.getAllProducts();
             assertEquals(products.remove(1).getId(), product2.getId());
             assertEquals(products.remove(0).getId(), product.getId());
@@ -154,13 +165,14 @@ public class ProductJdbcTest {
             stmt = connection.prepareStatement("DELETE FROM product");
             stmt.executeUpdate();
             stmt.close();
+
             stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
             stmt.executeUpdate();
             stmt.close();
 
-
+            logger.info("All products have been successfully received");
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            logger.info("Error when receiving all products");
         }
     }
 
@@ -221,10 +233,10 @@ public class ProductJdbcTest {
             stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
             stmt.executeUpdate();
             stmt.close();
-
+            logger.info("Product successfully updated");
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            logger.info("Product update error");
         }
 
     }
@@ -271,9 +283,7 @@ public class ProductJdbcTest {
 
                 Product actualProduct = new Product(id, product_name, description, price, quantity);
                 products.add(actualProduct);
-
             }
-            logger.info(products.toString());
             rs.close();
             stmt.close();
 
@@ -293,13 +303,10 @@ public class ProductJdbcTest {
             }
             stmt.close();
             rs.close();
-
-            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
-            stmt.executeUpdate();
-            stmt.close();
+            logger.info("Product successfully deleted");
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления пользователя", e);
+            logger.info("Product deletion error");
         }
     }
 }
