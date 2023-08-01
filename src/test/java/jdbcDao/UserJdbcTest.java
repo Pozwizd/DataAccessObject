@@ -16,9 +16,6 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-
-
-
 public class UserJdbcTest {
 
     private static final Logger logger = LogManager.getLogger(UserJdbcTest.class);
@@ -37,10 +34,9 @@ public class UserJdbcTest {
             stmt.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
-
 
     @Test
     public void testCreateUser(){
@@ -54,9 +50,7 @@ public class UserJdbcTest {
                 "123456");
 
 
-        /*
-        Создание пользователя
-         */
+        /* Создание пользователя */
         userDao.createUser(extentedUser);
 
         try(Connection connection = ConnectionPool.getConnection()) {
@@ -78,9 +72,13 @@ public class UserJdbcTest {
                         email,
                         phoneNumber);
                 /* Проверка созданного пользователя */
+                assertEquals(extentedUser.getId(), actualUser.getId());
                 assertEquals(extentedUser.getUsername(), actualUser.getUsername());
-                logger.info("Пользователь успешно создан");
+                assertEquals(extentedUser.getPassword(), actualUser.getPassword());
+                assertEquals(extentedUser.getEmail(), actualUser.getEmail());
+                assertEquals(extentedUser.getPhoneNumber(), actualUser.getPhoneNumber());
             }
+            logger.info("Пользователь успешно создан");
             rs.close();
             stmt.close();
 
@@ -110,10 +108,14 @@ public class UserJdbcTest {
             stmt.setString(5, extentedUser.getPhoneNumber());
             stmt.executeUpdate();
             stmt.close();
-            /* Проверка полученного пользователя */
+            /* Получение пользователя по id */
             User actualUser = userDao.getUserById(1);
-            logger.info("Пользователь успешно получен по id");
+            assertEquals(extentedUser.getId(), actualUser.getId());
             assertEquals(extentedUser.getUsername(), actualUser.getUsername());
+            assertEquals(extentedUser.getPassword(), actualUser.getPassword());
+            assertEquals(extentedUser.getEmail(), actualUser.getEmail());
+            assertEquals(extentedUser.getPhoneNumber(), actualUser.getPhoneNumber());
+            logger.info("Пользователь успешно получен по id");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -163,7 +165,11 @@ public class UserJdbcTest {
                         email,
                         phoneNumber);
                 /* Проверка обновления данных пользователя пользователя */
+                assertEquals(updateExtentedUser.getId(), actualUser.getId());
                 assertEquals(updateExtentedUser.getUsername(), actualUser.getUsername());
+                assertEquals(updateExtentedUser.getPassword(), actualUser.getPassword());
+                assertEquals(updateExtentedUser.getEmail(), actualUser.getEmail());
+                assertEquals(updateExtentedUser.getPhoneNumber(), actualUser.getPhoneNumber());
                 logger.info("Пользователь успешно обновлен");
             }
             rs.close();
@@ -211,8 +217,9 @@ public class UserJdbcTest {
                         phoneNumber);
                 /* Проверка обновления данных пользователя пользователя */
                 assertNull(actualUser);
-                logger.info("Пользователь успешно удален");
+
             }
+            logger.info("Пользователь успешно удален");
             rs.close();
             stmt.close();
 

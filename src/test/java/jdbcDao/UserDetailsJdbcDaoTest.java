@@ -62,16 +62,13 @@ public class UserDetailsJdbcDaoTest {
     public void testCreateUserDetails() {
 
         UserDetails userDetails = new UserDetails("Іван", "Петренко", "male", new Date(1980,1,1), "Київ, вул. Шевченка 10");
-
         try(Connection connection = ConnectionPool.getConnection()) {
 
             UserDetailsDao.createUserDetails(1, userDetails);
 
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_details WHERE user_id=?");
             stmt.setInt(1, 1);
-
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
@@ -90,11 +87,11 @@ public class UserDetailsJdbcDaoTest {
                 assertEquals(userDetails.getGender(), actualUserDetails.getGender());
                 assertEquals(userDetails.getDateOfBirth(), actualUserDetails.getDateOfBirth());
                 assertEquals(userDetails.getAddress(), actualUserDetails.getAddress());
-                logger.info("UserDetails successfully created");
+
             }
             rs.close();
             stmt.close();
-
+            logger.info("UserDetails successfully created");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -128,8 +125,9 @@ public class UserDetailsJdbcDaoTest {
             assertEquals(userDetails.getLastName(), actualUserDetails.getLastName());
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка создания user details", e);
+            throw new RuntimeException(e);
         }
+        logger.info("UserDetails successfully created");
 
     }
 
@@ -191,7 +189,7 @@ public class UserDetailsJdbcDaoTest {
                 assertEquals(updateUserDetails.getDateOfBirth(), actualUserDetails.getDateOfBirth());
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка создания user details", e);
+            throw new RuntimeException(e);
         }
     }
 }
