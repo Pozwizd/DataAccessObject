@@ -121,7 +121,7 @@ public class ProductJdbcTest {
             assertEquals(products.get(0).getDescription(), product.getDescription());
             assertEquals(products.get(0).getPrice(), product.getPrice(), 0.001);
             assertEquals(products.get(0).getQuantity(), product.getQuantity());
-
+            logger.info("Product successfully created");
         } catch (SQLException e) {
             logger.info("Product successfully created");
         }
