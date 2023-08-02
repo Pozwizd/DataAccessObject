@@ -1,3 +1,5 @@
+package OrmDao;
+
 import dao.hibernate.UserOrmDao;
 import models.User;
 import org.apache.logging.log4j.LogManager;

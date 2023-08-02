@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit name="Default">
+        <packages>
+          <package value="models" />
+        </packages>
+        <entities>
+          <entity value="models.User" />
+          <entity value="models.Order" />
+          <entity value="models.Product" />
+          <entity value="models.UserDetails" />
+          <entity value="models.ShoppingCart" />
+        </entities>
+      </persistence-unit>
+    </persistence-units>
+  </component>
+</project>
