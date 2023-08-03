@@ -34,7 +34,7 @@ public class UserDaoJdbc implements UserDao {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getPhoneNumber());
+            stmt.setString(4, user.getPhone_number());
             stmt.executeUpdate();
 
             stmt.close();
@@ -89,7 +89,7 @@ public class UserDaoJdbc implements UserDao {
             stmt.setString(2, user.getUsername());
             stmt.setString(3, user.getPassword());
             stmt.setString(4, user.getEmail());
-            stmt.setString(5, user.getPhoneNumber());
+            stmt.setString(5, user.getPhone_number());
             stmt.setInt(6, user.getId());
             stmt.executeUpdate();
             stmt.close();

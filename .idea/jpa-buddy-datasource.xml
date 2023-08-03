@@ -2,7 +2,7 @@
 <project version="4">
   <component name="JpbDataSourceConfig">
     <data-source-infos>
-      <data-source-info id="" persistence-unit-name="Default" />
+      <data-source-info id="d460c383-94c6-4844-b89f-dc1885e51ef2" persistence-unit-name="Default" />
     </data-source-infos>
   </component>
 </project>

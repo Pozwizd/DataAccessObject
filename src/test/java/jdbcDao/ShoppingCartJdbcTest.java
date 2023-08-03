@@ -62,7 +62,7 @@ public class ShoppingCartJdbcTest {
             stmt.setString(2, user.getUsername());
             stmt.setString(3, user.getPassword());
             stmt.setString(4, user.getEmail());
-            stmt.setString(5, user.getPhoneNumber());
+            stmt.setString(5, user.getPhone_number());
             stmt.executeUpdate();
             stmt.close();
 
@@ -72,7 +72,7 @@ public class ShoppingCartJdbcTest {
             stmt.setString(2, user2.getUsername());
             stmt.setString(3, user2.getPassword());
             stmt.setString(4, user2.getEmail());
-            stmt.setString(5, user2.getPhoneNumber());
+            stmt.setString(5, user2.getPhone_number());
             stmt.executeUpdate();
             stmt.close();
 

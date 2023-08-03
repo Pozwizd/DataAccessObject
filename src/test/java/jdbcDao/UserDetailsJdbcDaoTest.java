@@ -1,6 +1,5 @@
 package jdbcDao;
 
-import dao.jdbc.UserDaoJdbc;
 import dao.jdbc.UserDetailsJdbcDao;
 import models.User;
 import models.UserDetails;
@@ -35,7 +34,7 @@ public class UserDetailsJdbcDaoTest {
             stmt.setString(2, extentedUser.getUsername());
             stmt.setString(3, extentedUser.getPassword());
             stmt.setString(4, extentedUser.getEmail());
-            stmt.setString(5, extentedUser.getPhoneNumber());
+            stmt.setString(5, extentedUser.getPhone_number());
             stmt.executeUpdate();
             stmt.close();
             logger.info("The user for the test has been successfully added");
@@ -107,15 +106,22 @@ public class UserDetailsJdbcDaoTest {
 
 
         try(Connection connection = ConnectionPool.getConnection()) {
+
+            // Преобразуем дату в java.sql.Date
+            java.sql.Date sqlDate = new java.sql.Date(userDetails.getDateOfBirth().getTime());
+
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO user_details (first_name, last_name, date_of_birth, address, user_id) " +
-                            "VALUES (?, ?, ?, ?, ?)");
+                    "INSERT INTO user_details (first_name, last_name, date_of_birth, address, user_id) VALUES (?, ?, ?, ?, ?)");
 
             stmt.setString(1, userDetails.getFirstName());
             stmt.setString(2, userDetails.getLastName());
-            stmt.setDate(3, userDetails.getDateOfBirth());
+
+            // Вызываем setDate c преобразованной датой
+            stmt.setDate(3, sqlDate);
+
             stmt.setString(4, userDetails.getAddress());
             stmt.setInt(5, 1);
+
             stmt.executeUpdate();
             stmt.close();
 
@@ -149,15 +155,22 @@ public class UserDetailsJdbcDaoTest {
 
 
         try(Connection connection = ConnectionPool.getConnection()) {
+
+            // Преобразуем дату в java.sql.Date
+            java.sql.Date sqlDate = new java.sql.Date(userDetails.getDateOfBirth().getTime());
+
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO user_details (first_name, last_name, date_of_birth, address, user_id) " +
-                            "VALUES (?, ?, ?, ?, ?)");
+                    "INSERT INTO user_details (first_name, last_name, date_of_birth, address, user_id) VALUES (?, ?, ?, ?, ?)");
 
             stmt.setString(1, userDetails.getFirstName());
             stmt.setString(2, userDetails.getLastName());
-            stmt.setDate(3, userDetails.getDateOfBirth());
+
+            // Вызываем setDate c преобразованной датой
+            stmt.setDate(3, sqlDate);
+
             stmt.setString(4, userDetails.getAddress());
             stmt.setInt(5, 1);
+
             stmt.executeUpdate();
             stmt.close();
 

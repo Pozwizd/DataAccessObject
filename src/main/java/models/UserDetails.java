@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -12,7 +12,11 @@ import java.sql.Date;
 @Table(name = "user_details")
 public class UserDetails {
 
-    @Column(name="user_id")
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private int userId;
 
     @OneToOne

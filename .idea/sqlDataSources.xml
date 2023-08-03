@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="a5c370b9-fece-4cb0-829c-705f3a5a2c1a" name="hibernate.cfg.xml">
+      <data-sources db="d460c383-94c6-4844-b89f-dc1885e51ef2" ddl="f80ceff5-9fb3-4b9b-b543-929b5feff9de" />
+      <scope>
+        <node kind="schema" qname="shop" />
+      </scope>
+    </mapping>
+  </component>
+</project>

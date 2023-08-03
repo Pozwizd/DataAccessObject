@@ -76,7 +76,7 @@ public class UserJdbcTest {
                 assertEquals(extentedUser.getUsername(), actualUser.getUsername());
                 assertEquals(extentedUser.getPassword(), actualUser.getPassword());
                 assertEquals(extentedUser.getEmail(), actualUser.getEmail());
-                assertEquals(extentedUser.getPhoneNumber(), actualUser.getPhoneNumber());
+                assertEquals(extentedUser.getPhone_number(), actualUser.getPhone_number());
             }
             logger.info("User successfully created");
             rs.close();
@@ -105,7 +105,7 @@ public class UserJdbcTest {
             stmt.setString(2, extentedUser.getUsername());
             stmt.setString(3, extentedUser.getPassword());
             stmt.setString(4, extentedUser.getEmail());
-            stmt.setString(5, extentedUser.getPhoneNumber());
+            stmt.setString(5, extentedUser.getPhone_number());
             stmt.executeUpdate();
             stmt.close();
             /* Получение пользователя по id */
@@ -114,7 +114,7 @@ public class UserJdbcTest {
             assertEquals(extentedUser.getUsername(), actualUser.getUsername());
             assertEquals(extentedUser.getPassword(), actualUser.getPassword());
             assertEquals(extentedUser.getEmail(), actualUser.getEmail());
-            assertEquals(extentedUser.getPhoneNumber(), actualUser.getPhoneNumber());
+            assertEquals(extentedUser.getPhone_number(), actualUser.getPhone_number());
             logger.info("User successfully received by id");
         } catch (SQLException e) {
             logger.info("Error getting user by id");
@@ -143,7 +143,7 @@ public class UserJdbcTest {
             stmt.setString(2, extentedUser.getUsername());
             stmt.setString(3, extentedUser.getPassword());
             stmt.setString(4, extentedUser.getEmail());
-            stmt.setString(5, extentedUser.getPhoneNumber());
+            stmt.setString(5, extentedUser.getPhone_number());
             stmt.executeUpdate();
             stmt.close();
 
@@ -169,7 +169,7 @@ public class UserJdbcTest {
                 assertEquals(updateExtentedUser.getUsername(), actualUser.getUsername());
                 assertEquals(updateExtentedUser.getPassword(), actualUser.getPassword());
                 assertEquals(updateExtentedUser.getEmail(), actualUser.getEmail());
-                assertEquals(updateExtentedUser.getPhoneNumber(), actualUser.getPhoneNumber());
+                assertEquals(updateExtentedUser.getPhone_number(), actualUser.getPhone_number());
                 logger.info("User successfully updated");
             }
             rs.close();
@@ -195,7 +195,7 @@ public class UserJdbcTest {
             stmt.setString(2, user.getUsername());
             stmt.setString(3, user.getPassword());
             stmt.setString(4, user.getEmail());
-            stmt.setString(5, user.getPhoneNumber());
+            stmt.setString(5, user.getPhone_number());
             stmt.executeUpdate();
             stmt.close();
 

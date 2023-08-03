@@ -10,21 +10,27 @@ import javax.persistence.*;
 @Entity
 public class ShoppingCart {
 
-    @Column(name="user_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+
     private int userId;
 
-    @Column(name="product_id")
     private int productId;
+
+    @ManyToOne
+    @JoinColumn(name="user_id", referencedColumnName="id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name="product_id", referencedColumnName="id")
+    private Product product;
 
     @Column
     private int quantity;
 
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name="user_id", referencedColumnName="id"),
-            @JoinColumn(name="product_id", referencedColumnName="id")
-    })
-    private User user;
+    // конструкторы, геттеры и сеттеры
 
 
     public ShoppingCart(int userId, int productId, int quantity) {

@@ -5,29 +5,22 @@
 <hibernate-configuration>
   <session-factory>
 
-    <!-- Настройки подключения к базе данных -->
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="connection.url">jdbc:mysql://localhost:3306/shop</property>
     <property name="connection.username">root</property>
     <property name="connection.password">0000</property>
 
-    <!-- Настройки пула соединений -->
-    <property name="connection.pool_size">10</property>
-
-    <!-- SQL диалект -->
-    <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
-
-    <!-- Отключение вторичного кэша -->
-    <property name="cache.provider_class">org.hibernate.cache.internal.NoCachingRegionFactory</property>
-
-    <!-- Вывод всех выполненных запросов SQL в stdout -->
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
     <property name="show_sql">true</property>
+    <property name="hibernate.format_sql">true</property>
 
-    <!-- Автоматическое обнаружение классов, используемых Hibernate -->
-    <property name="hibernate.archive.autodetect">class</property>
+    <property name="default_schema">shop</property>
 
     <!-- Пакет, в котором находятся классы моделей (POJO) -->
     <property name="packagesToScan">models</property>
+
+    <property name="hibernate.current_session_context_class">thread</property>
 
   </session-factory>
 </hibernate-configuration>

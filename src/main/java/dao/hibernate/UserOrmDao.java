@@ -49,7 +49,7 @@ public class UserOrmDao implements UserDao {
     @Override
     public List<User> getAllUsers() throws SQLException {
         Session session = sessionFactory.openSession();
-        List<User> users = session.createQuery("FROM User").list();
+        List<User> users = session.createQuery("FROM users").list();
         session.close();
         return users;
     }

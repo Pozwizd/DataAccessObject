@@ -12,18 +12,20 @@ import javax.persistence.*;
 public class Order {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
 
-    @Column(name="user_id")
+    @Column(name="user_ref")
+    @JoinColumn(name="user_ref", referencedColumnName="id", insertable=false, updatable=false)
     private int userId;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column
     private String orderList;
+
     @Column
     private double totalPrice;
 

@@ -24,6 +24,8 @@ public class UserOrmTest {
                 "user1@example.com",
                 "123456");
 
+
+
         userOrmDao.createUser(user);
 
         // загружаем сохраненного пользователя по id

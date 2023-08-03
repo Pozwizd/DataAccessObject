@@ -15,6 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private int id;
 
     @Column
@@ -27,9 +28,9 @@ public class User {
     private String email;
 
     @Column
-    private String phoneNumber;
+    private String phone_number;
 
-    @OneToOne(mappedBy="users")
+    @OneToOne(mappedBy = "user")
     private UserDetails userDetails;
 
     @OneToMany(mappedBy="user")
@@ -45,14 +46,14 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone_number = phoneNumber;
     }
 
     public User(String username, String password, String email, String phoneNumber) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone_number = phoneNumber;
     }
 
 
