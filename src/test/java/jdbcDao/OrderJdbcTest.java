@@ -163,8 +163,6 @@ public class OrderJdbcTest {
             stmt.executeUpdate();
             stmt.close();
 
-
-
             logger.info("Deleting the User and the product after a test");
         } catch (SQLException e) {
             logger.info("Error deleting user and product after testing");
@@ -198,7 +196,7 @@ public class OrderJdbcTest {
                 assertEquals(order.getOrderList(), actualOrder.getOrderList());
                 assertEquals(order.getTotalPrice(), actualOrder.getTotalPrice());
                 logger.info("Order has successfully been created");
-
+            stmt.close();
             }
         } catch (SQLException e) {
             logger.info("Error deleting user and product after testing");
@@ -282,7 +280,6 @@ public class OrderJdbcTest {
             stmt.setDouble(4, order3.getTotalPrice());
             stmt.executeUpdate();
             stmt.close();
-
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка добавления заказа", e);
         }

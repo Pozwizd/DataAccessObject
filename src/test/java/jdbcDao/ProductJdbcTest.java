@@ -35,6 +35,16 @@ public class ProductJdbcTest {
             stmt.executeUpdate();
             stmt.close();
 
+
+            stmt = connection.prepareStatement("DELETE FROM orders");
+            stmt.executeUpdate();
+            stmt.close();
+
+
+            stmt = connection.prepareStatement("ALTER TABLE orders AUTO_INCREMENT = 1");
+            stmt.executeUpdate();
+            stmt.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -301,8 +311,8 @@ public class ProductJdbcTest {
                 int quantity = rs.getInt("quantity");
                 assertNull(new Product(id, product_name, description, price, quantity));
             }
-            stmt.close();
             rs.close();
+            stmt.close();
             logger.info("Product successfully deleted");
 
         } catch (SQLException e) {

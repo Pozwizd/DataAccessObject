@@ -139,11 +139,6 @@ public class orderServiceTest {
             stmt.executeUpdate();
             stmt.close();
 
-
-            stmt = connection.prepareStatement("ALTER TABLE shopping_cart AUTO_INCREMENT = 1");
-            stmt.executeUpdate();
-            stmt.close();
-
             stmt = connection.prepareStatement("ALTER TABLE users AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
@@ -151,6 +146,11 @@ public class orderServiceTest {
             stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
+
+            stmt = connection.prepareStatement("ALTER TABLE shopping_cart AUTO_INCREMENT = 1");
+            stmt.executeUpdate();
+            stmt.close();
+
             logger.info("Deleting the User and the product after a test");
         } catch (SQLException e) {
             logger.info("Error deleting user and product after testing");

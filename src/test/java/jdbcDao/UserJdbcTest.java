@@ -29,7 +29,7 @@ public class UserJdbcTest {
             stmt.executeUpdate();
             stmt.close();
 
-            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
+            stmt = connection.prepareStatement("ALTER TABLE users AUTO_INCREMENT = 1;");
             stmt.executeUpdate();
             stmt.close();
 
@@ -225,7 +225,5 @@ public class UserJdbcTest {
         } catch (SQLException e) {
             logger.info("User deletion error");
         }
-
     }
-
 }

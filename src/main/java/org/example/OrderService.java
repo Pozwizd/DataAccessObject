@@ -69,7 +69,7 @@ public class OrderService {
             builder.append(", ");
         }
 
-        if(builder.length() > 0) {
+        if(!builder.isEmpty()) {
             builder.setLength(builder.length() - 2);
         }
 

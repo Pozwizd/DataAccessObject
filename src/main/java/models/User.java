@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "shop")
 public class User {
 
     @Id
@@ -55,6 +55,4 @@ public class User {
         this.email = email;
         this.phone_number = phoneNumber;
     }
-
-
 }

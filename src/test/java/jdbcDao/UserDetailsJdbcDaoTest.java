@@ -49,6 +49,11 @@ public class UserDetailsJdbcDaoTest {
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM users");
             stmt.executeUpdate();
             stmt.close();
+
+            stmt = connection.prepareStatement("ALTER TABLE users AUTO_INCREMENT = 1;");
+            stmt.executeUpdate();
+            stmt.close();
+
             logger.info("User and UserDetails were deleted after testing");
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -59,7 +64,11 @@ public class UserDetailsJdbcDaoTest {
     @Test
     public void testCreateUserDetails() {
 
-        UserDetails userDetails = new UserDetails("Іван", "Петренко", "male", new Date(1980,1,1), "Київ, вул. Шевченка 10");
+        UserDetails userDetails = new UserDetails("Іван",
+                "Петренко",
+                "male",
+                new Date(1980,1,1),
+                "Київ, вул. Шевченка 10");
         try(Connection connection = ConnectionPool.getConnection()) {
 
             UserDetailsDao.createUserDetails(1, userDetails);

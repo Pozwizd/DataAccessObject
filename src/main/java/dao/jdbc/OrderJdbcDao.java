@@ -19,14 +19,13 @@ public class OrderJdbcDao implements OrderDao {
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO shop.orders (user_id, order_list, total_price) VALUES (?, ?, ?)");
+                    "INSERT INTO orders (user_id, order_list, total_price) VALUES (?, ?, ?)");
 
             stmt.setInt(1, order.getUserId());
             stmt.setString(2, order.getOrderList());
             stmt.setDouble(3, order.getTotalPrice());
-
-
             stmt.executeUpdate();
+            stmt.close();
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка добавления пользователя", e);
@@ -47,9 +46,9 @@ public class OrderJdbcDao implements OrderDao {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int orderId = rs.getInt("id");
-                userId = rs.getInt("userId");
-                String orderList = rs.getString("orderList");
+                int orderId = rs.getInt("order_id");
+                userId = rs.getInt("user_Id");
+                String orderList = rs.getString("order_list");
                 int totalPrice = rs.getInt("total_price");
 
                 Order order = new Order(orderId, userId, orderList, totalPrice);
@@ -75,9 +74,9 @@ public class OrderJdbcDao implements OrderDao {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int orderId = rs.getInt("id");
-                int userId = rs.getInt("userId");
-                String orderList = rs.getString("orderList");
+                int orderId = rs.getInt("order_id");
+                int userId = rs.getInt("user_Id");
+                String orderList = rs.getString("order_list");
                 int totalPrice = rs.getInt("total_price");
 
                 Order order = new Order(orderId, userId, orderList, totalPrice);

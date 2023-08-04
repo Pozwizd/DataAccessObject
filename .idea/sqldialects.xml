@@ -2,8 +2,12 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/java/dao/jdbc/OrderJdbcDao.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/test/java/OrmDao/UserOrmTest.java" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/test/java/jdbcDao/ProductJdbcTest.java" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/test/java/jdbcDao/UserDetailsJdbcDaoTest.java" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/test/java/jdbcDao/UserJdbcTest.java" dialect="MySQL" />
+  </component>
+  <component name="SqlResolveMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/dao/jdbc/OrderJdbcDao.java" scope="{&quot;node&quot;:{  &quot;@negative&quot;:&quot;1&quot;,  &quot;group&quot;:{   &quot;@kind&quot;:&quot;root&quot;,   &quot;node&quot;:{    &quot;@negative&quot;:&quot;1&quot;   }  } }}" />
   </component>
 </project>

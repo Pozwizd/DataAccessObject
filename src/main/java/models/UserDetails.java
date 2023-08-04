@@ -2,42 +2,45 @@ package models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Setter
 @Getter
-@Entity
+@Entity(name="user_details")
 @Table(name = "user_details")
 public class UserDetails {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
+    @Column(name="user_id")
     private int userId;
 
-    @OneToOne
-    @JoinColumn(name="user_id")
-    private User user;
-
-    @Column
+    @Column(name="first_name")
     private String firstName;
 
-    @Column
+    @Column(name="last_name")
     private String lastName;
 
-    @Column
+    @Column(name="gender")
     private String gender;
 
-    @Column
+    @Column(name="date_of_birth")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
     @Column
     private String address;
+
+
+
+    @OneToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
 
     public UserDetails() {}
 
