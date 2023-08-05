@@ -179,10 +179,9 @@ public class ProductJdbcTest {
             stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
             stmt.executeUpdate();
             stmt.close();
-
-            logger.info("All products have been successfully received");
+            logger.info("Product successfully received by id");
         } catch (SQLException e) {
-            logger.info("Error when receiving all products");
+            logger.info("Error getting Product by id");
         }
     }
 

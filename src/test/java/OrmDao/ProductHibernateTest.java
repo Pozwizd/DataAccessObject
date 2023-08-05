@@ -142,7 +142,7 @@ public class ProductHibernateTest {
 
             logger.info("Product successfully retrieved by ID");
         } catch (HibernateException e) {
-
+            logger.info("Error getting Product by id");
         }
     }
 }

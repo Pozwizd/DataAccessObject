@@ -11,7 +11,7 @@ import java.util.List;
 
 public class UserDetailsOrmDao {
 
-    private SessionFactory sessionFactory;
+    SessionFactory sessionFactory;
 
     public UserDetailsOrmDao(SessionFactory factory) {
         this.sessionFactory = factory;

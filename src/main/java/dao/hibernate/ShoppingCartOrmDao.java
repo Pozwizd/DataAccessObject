@@ -14,6 +14,10 @@ public class ShoppingCartOrmDao implements ShoppingCartDao {
 
     SessionFactory sessionFactory;
 
+    public ShoppingCartOrmDao(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public void addProductToCart(ShoppingCart shoppingCart) {
         Session session = sessionFactory.openSession();

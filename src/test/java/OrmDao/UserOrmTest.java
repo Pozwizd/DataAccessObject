@@ -21,7 +21,9 @@ import static org.junit.Assert.assertEquals;
 
 public class UserOrmTest {
     private static final Logger logger = LogManager.getLogger(UserOrmTest.class);
-    SessionFactory factory = HibernateUtil.getSessionFactory();
+
+    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    UserOrmDao userOrmDao = new UserOrmDao(sessionFactory);
 
 
     @AfterEach
@@ -32,7 +34,7 @@ public class UserOrmTest {
             stmt.executeUpdate();
             stmt.close();
 
-            stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1;");
+            stmt = connection.prepareStatement("ALTER TABLE users AUTO_INCREMENT = 1;");
             stmt.executeUpdate();
             stmt.close();
 
@@ -44,9 +46,6 @@ public class UserOrmTest {
     @Test
     public void testCreateUser() {
         LogManager.getLogger(org.hibernate.Version.class);
-
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        UserOrmDao userOrmDao = new UserOrmDao(sessionFactory);
 
         User user = new User(1,
                 "user1",
