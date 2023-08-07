@@ -25,11 +25,6 @@ public class OrderJdbcTest {
 
     OrderJdbcDao orderJdbcDao = new OrderJdbcDao();
 
-    Order order = new Order(1,
-            1,
-            "AMD Ryzen 9 5950X * 4, Intel Core i9-11900K * 1",
-            4695.00);
-
     @BeforeEach
     public void createObjectsForTesting(){
 
@@ -162,11 +157,9 @@ public class OrderJdbcTest {
             stmt = connection.prepareStatement("ALTER TABLE orders AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
-
             logger.info("Deleting the User and the product after a test");
         } catch (SQLException e) {
             logger.info("Error deleting user and product after testing");
-
         }
     }
 
@@ -178,8 +171,8 @@ public class OrderJdbcTest {
                 "AMD Ryzen 9 5950X * 4, Intel Core i9-11900K * 1",
                 4695.00);
 
-
         orderJdbcDao.createOrder(order);
+
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM orders " +
                     "WHERE user_id = 1");
@@ -200,7 +193,6 @@ public class OrderJdbcTest {
             }
         } catch (SQLException e) {
             logger.info("Error deleting user and product after testing");
-
         }
 
     }
@@ -222,10 +214,10 @@ public class OrderJdbcTest {
             stmt.setDouble(3, order.getTotalPrice());
             stmt.executeUpdate();
             stmt.close();
-            logger.info("Order has successfully been created");
+
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления заказа", e);
+            logger.info("Error creating an Order for a test", e);
         }
 
         List<Order> orders = orderJdbcDao.getUserOrders(1);
@@ -234,8 +226,7 @@ public class OrderJdbcTest {
         assertEquals(orders.get(0).getUserId(), order.getUserId());
         assertEquals(orders.get(0).getOrderList(), order.getOrderList());
         assertEquals(orders.get(0).getTotalPrice(), order.getTotalPrice());
-
-
+        logger.info("Orders have been successfully received");
     }
 
     @Test
@@ -281,7 +272,7 @@ public class OrderJdbcTest {
             stmt.executeUpdate();
             stmt.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления заказа", e);
+            logger.info("Error creating an Order for a test", e);
         }
 
         List<Order> orders = orderJdbcDao.getAllOrders();

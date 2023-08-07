@@ -35,12 +35,9 @@ public class UserDetails {
     @Column
     private String address;
 
-
-
     @OneToOne
     @JoinColumn(name="user_id")
     private User user;
-
 
     public UserDetails() {}
 

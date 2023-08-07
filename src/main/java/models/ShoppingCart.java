@@ -30,9 +30,6 @@ public class ShoppingCart {
     @Column
     private int quantity;
 
-    // конструкторы, геттеры и сеттеры
-
-
     public ShoppingCart(int userId, int productId, int quantity) {
         this.userId = userId;
         this.productId = productId;
