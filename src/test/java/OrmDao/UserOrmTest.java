@@ -1,6 +1,6 @@
 package OrmDao;
 
-import dao.hibernate.UserOrmDao;
+import dao.hibernate.UserDaoJpa;
 import models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,8 +10,8 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import utils.ConnectionPool;
-import utils.HibernateUtil;
-
+import utils.EntityManagerUtil;
+import javax.persistence.EntityManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -22,8 +22,7 @@ import static org.junit.Assert.assertEquals;
 public class UserOrmTest {
     private static final Logger logger = LogManager.getLogger(UserOrmTest.class);
 
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    UserOrmDao userOrmDao = new UserOrmDao(sessionFactory);
+    UserDaoJpa userDaoJpa = new UserDaoJpa();
 
 
     @AfterEach
@@ -53,9 +52,9 @@ public class UserOrmTest {
                 "user1@example.com",
                 "123456");
 
+        userDaoJpa.createUser(user);
 
-        userOrmDao.createUser(user);
-        User savedUser = userOrmDao.getUserById(user.getId());
+        User savedUser = userDaoJpa.getUserById(user.getId());
         System.out.println(savedUser.getUsername());
         assertEquals(1, savedUser.getId());
         assertEquals(user.getEmail(), savedUser.getEmail());

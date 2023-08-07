@@ -54,14 +54,15 @@ public class OrderService {
             throw new RuntimeException(e);
         }
 
-//        try(Connection connection = ConnectionPool.getConnection()) {
-//            PreparedStatement stmt = connection.prepareStatement(
-//                    "DELETE FROM shopping_cart WHERE user_id = ?");
-//            stmt.executeUpdate();
-//            stmt.close();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+        try(Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM shopping_cart WHERE user_id = ?");
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         return order;
 
