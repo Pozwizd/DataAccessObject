@@ -15,7 +15,6 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
 
         try(Connection connection = ConnectionPool.getConnection()) {
 
-            // Преобразуем дату в java.sql.Date
             java.sql.Date sqlDate = new java.sql.Date(details.getDateOfBirth().getTime());
 
             PreparedStatement stmt = connection.prepareStatement(
@@ -24,7 +23,6 @@ public class UserDetailsJdbcDao implements UserDetailsDao {
             stmt.setString(1, details.getFirstName());
             stmt.setString(2, details.getLastName());
 
-            // Вызываем setDate c преобразованной датой
             stmt.setDate(3, sqlDate);
 
             stmt.setString(4, details.getAddress());

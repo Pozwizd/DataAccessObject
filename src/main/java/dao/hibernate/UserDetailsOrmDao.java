@@ -2,48 +2,86 @@ package dao.hibernate;
 
 
 import models.UserDetails;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-
+import utils.EntityManagerUtil;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 
 public class UserDetailsOrmDao {
 
-    SessionFactory sessionFactory;
-
-    public UserDetailsOrmDao(SessionFactory factory) {
-        this.sessionFactory = factory;
-    }
 
     public void createUserDetails(UserDetails details) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        session.save(details);
-        tx.commit();
-        session.close();
+        UserDetails userDetails = new UserDetails(
+                details.getFirstName(),
+                details.getLastName(),
+                details.getGender(),
+                details.getDateOfBirth(),
+                details.getAddress());
+        EntityManager em = null;
+        try{
+            em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
+            UserDetails userDetailsMerge = em.merge(userDetails);
+            em.persist(userDetailsMerge);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
     public void updateUserDetails(UserDetails details) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        session.update(details);
-        tx.commit();
-        session.close();
+        UserDetails userDetails = new UserDetails(
+                details.getFirstName(),
+                details.getLastName(),
+                details.getGender(),
+                details.getDateOfBirth(),
+                details.getAddress());
+        EntityManager em = null;
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
+            em.merge(userDetails);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+
+
     }
 
     public UserDetails getUserDetailsById(int id) {
-        Session session = sessionFactory.openSession();
-        UserDetails details = session.get(UserDetails.class, id);
-        session.close();
-        return details;
+        EntityManager em = null;
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            return em.find(UserDetails.class, id);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
     public List<UserDetails> getAllUserDetails() {
-        Session session = sessionFactory.openSession();
-        List<UserDetails> details = session.createQuery("FROM UserDetails").list();
-        session.close();
-        return details;
+        EntityManager em = null;
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            return em.createQuery("from user_details", UserDetails.class).getResultList();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 }

@@ -1,6 +1,5 @@
 package models;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,20 +12,21 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="order_id")
     private int orderId;
 
     @Column(name="user_ref")
-    @JoinColumn(name="user_ref", referencedColumnName="id", insertable=false, updatable=false)
+    @JoinColumn(name="user_id")
     private int userId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column
+    @Column(name="order_list")
     private String orderList;
 
-    @Column
+    @Column(name="total_price")
     private double totalPrice;
 
     public Order() {}

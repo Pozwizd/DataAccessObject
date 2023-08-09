@@ -2,62 +2,114 @@ package dao.hibernate;
 
 import dao.ProductDao;
 import models.Product;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import utils.EntityManagerUtil;
 
 
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 public class ProductOrmDao implements ProductDao {
 
-    SessionFactory sessionFactory;
-
-    public ProductOrmDao(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    @Override
+    public void createProduct(Product product) {
+        EntityManager em = null;
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
+            em.merge(product);
+            em.persist(product);
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
 
     @Override
     public List<Product> getAllProducts() {
-        Session session = sessionFactory.openSession();
-        List<Product> products = session.createQuery("from Product").list();
-        session.close();
+        EntityManager em  = null;
+        ArrayList<Product> products = new ArrayList<>();
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            products.add((Product) em.createQuery("from Product").getResultList());
+            em.close();
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
         return products;
     }
 
     @Override
     public Product getProductById(int productId) {
-        Session session = sessionFactory.openSession();
-        Product product = session.get(Product.class, productId);
-        session.close();
-        return product;
-    }
-
-    @Override
-    public void createProduct(Product product) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        session.save(product);
-        tx.commit();
-        session.close();
+        EntityManager em = null;
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            Product product = em.find(Product.class, productId);
+            em.close();
+            return product;
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
     }
 
     @Override
     public void updateProduct(Product product) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        session.update(product);
-        tx.commit();
-        session.close();
+        EntityManager em = null;
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
+            em.merge(product);
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
     @Override
     public void deleteProduct(int productId) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        Product product = session.get(Product.class, productId);
-        session.delete(product);
-        tx.commit();
-        session.close();
+        EntityManager em = null;
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
+            Product product = em.find(Product.class, productId);
+            em.remove(product);
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 }

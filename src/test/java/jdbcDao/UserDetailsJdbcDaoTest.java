@@ -156,8 +156,8 @@ public class UserDetailsJdbcDaoTest {
                 "male",
                 new Date(1980,1,1),
                 "Київ, вул. Шевченка 10");
-        UserDetails updateUserDetails = new UserDetails("Іван",
-                "Петренко",
+        UserDetails updateUserDetails = new UserDetails("Педро",
+                "Іванович",
                 "male",
                 new Date(1980,12,19),
                 "Київ, вул. Бандери 10");

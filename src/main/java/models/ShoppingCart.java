@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Setter
 @Getter
-@Entity
+@Entity(name = "shopping_cart")
 public class ShoppingCart {
 
     @Id

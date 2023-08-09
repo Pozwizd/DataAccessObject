@@ -2,22 +2,14 @@ package models;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
+import javax.persistence.GenerationType;
 import java.util.Date;
 
 @Setter
 @Getter
 @Entity(name="user_details")
-@Table(name = "user_details")
 public class UserDetails {
-
-    @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name="user_id")
-    private int userId;
 
     @Column(name="first_name")
     private String firstName;
@@ -34,6 +26,11 @@ public class UserDetails {
 
     @Column
     private String address;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id")
+    private int userId;
 
     @OneToOne
     @JoinColumn(name="user_id")

@@ -1,5 +1,4 @@
 package dao.hibernate;
-
 import dao.UserDao;
 import models.User;
 import javax.persistence.*;
@@ -43,7 +42,7 @@ public class UserDaoJpa implements UserDao {
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            em.merge(newUser);
+            em.merge(user);
             em.getTransaction().commit();
 
         } catch (Exception e) {
@@ -90,14 +89,14 @@ public class UserDaoJpa implements UserDao {
 
     @Override
     public void deleteUser(User user) {
-        User newUser = new User(user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone_number());
+
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
+            User newUser = em.merge(user);
             em.getTransaction().begin();
             em.remove(newUser);
             em.getTransaction().commit();
-
         } catch (Exception e) {
             if (em != null) {
                 em.getTransaction().rollback();
