@@ -11,18 +11,12 @@ public class UserDetailsOrmDao {
 
 
     public void createUserDetails(UserDetails details) {
-        UserDetails userDetails = new UserDetails(
-                details.getFirstName(),
-                details.getLastName(),
-                details.getGender(),
-                details.getDateOfBirth(),
-                details.getAddress());
         EntityManager em = null;
-        try{
+        try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            UserDetails userDetailsMerge = em.merge(userDetails);
-            em.persist(userDetailsMerge);
+            em.merge(details);
+            em.persist(details);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em != null) {

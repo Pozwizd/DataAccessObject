@@ -80,6 +80,7 @@ public class UserDetailsOrmTest {
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
             UserDetails userDetails = em.find(UserDetails.class, 1);
             Assertions.assertEquals(details.getFirstName(), userDetails.getFirstName());
             Assertions.assertEquals(details.getLastName(), userDetails.getLastName());

@@ -34,19 +34,23 @@ public class OrderOrmDao implements OrderDao{
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
-            Query query = em.createQuery("from Order where userId = :userId");
+            em.getTransaction().begin();
+            Query query = em.createQuery("SELECT o FROM orders o WHERE o.userId = :userId");
             query.setParameter("userId", userId);
-            return query.getResultList();
-        } catch (Exception e) {
+            List<Order> orders = query.getResultList();
+            em.getTransaction().commit();
+            return orders;
+
+        } catch (Exception ex) {
             if (em != null) {
                 em.getTransaction().rollback();
             }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
             }
         }
-        return null;
     }
 
     @Override
@@ -54,17 +58,21 @@ public class OrderOrmDao implements OrderDao{
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
-            Query query = em.createQuery("from Order");
-            return query.getResultList();
-        } catch(Exception e) {
+            em.getTransaction().begin();
+            Query query = em.createQuery("SELECT o FROM orders o");
+            List<Order> orders = query.getResultList();
+            em.getTransaction().commit();
+            return orders;
+
+        } catch (Exception ex) {
             if (em != null) {
                 em.getTransaction().rollback();
             }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
             }
         }
-        return null;
     }
 }
