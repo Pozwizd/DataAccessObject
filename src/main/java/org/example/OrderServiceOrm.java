@@ -12,7 +12,7 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class orderServiceHibernate {
+public class OrderServiceOrm {
 
     private SessionFactory sessionFactory;
 

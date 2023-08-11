@@ -42,17 +42,6 @@ public class User {
 
     public User() {}
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", phone_number='" + phone_number + '\'' +
-                '}';
-    }
-
     public User(int id, String username, String password, String email, String phoneNumber) {
         this.id = id;
         this.username = username;
