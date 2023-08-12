@@ -1,9 +1,8 @@
 package dao.hibernate;
 
-import dao.ShoppingCartDao;
-import models.ShoppingCart;
-
+import Entity.ShoppingCart;
 import utils.EntityManagerUtil;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;

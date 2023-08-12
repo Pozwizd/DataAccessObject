@@ -1,9 +1,9 @@
 package dao.hibernate;
 
 import dao.jdbc.ShoppingCartJdbcDao;
-import models.Product;
-import models.ShoppingCart;
-import models.User;
+import Entity.Product;
+import Entity.ShoppingCart;
+import Entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;

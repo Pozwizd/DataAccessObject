@@ -1,6 +1,6 @@
-package dao;
+package dao.hibernate;
 
-import models.Product;
+import Entity.Product;
 
 import java.util.List;
 

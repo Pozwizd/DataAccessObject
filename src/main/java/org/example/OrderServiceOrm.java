@@ -1,11 +1,10 @@
 package org.example;
 
+import Entity.Order;
 import dao.hibernate.OrderOrmDao;
 import dao.hibernate.ShoppingCartOrmDao;
-import models.*;
 import org.hibernate.SessionFactory;
 import utils.EntityManagerUtil;
-
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

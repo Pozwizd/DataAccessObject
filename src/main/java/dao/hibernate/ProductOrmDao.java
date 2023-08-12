@@ -1,9 +1,7 @@
 package dao.hibernate;
 
-import dao.ProductDao;
-import models.Product;
+import Entity.Product;
 import utils.EntityManagerUtil;
-
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;

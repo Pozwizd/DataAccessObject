@@ -1,7 +1,6 @@
 package dao.jdbc;
 
 
-import dao.ShoppingCartDao;
 import models.ShoppingCart;
 import utils.ConnectionPool;
 

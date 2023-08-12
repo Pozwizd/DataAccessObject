@@ -1,6 +1,6 @@
-package dao;
+package dao.hibernate;
 
-import models.User;
+import Entity.User;
 
 import java.sql.SQLException;
 import java.util.List;

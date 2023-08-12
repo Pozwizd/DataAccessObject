@@ -1,8 +1,9 @@
 package dao.hibernate;
-import dao.UserDao;
-import models.User;
-import javax.persistence.*;
+
+import Entity.User;
 import utils.EntityManagerUtil;
+
+import javax.persistence.EntityManager;
 import java.util.List;
 
 
@@ -11,7 +12,7 @@ public class UserDaoJpa implements UserDao {
 
     @Override
     public void createUser(User user) {
-        User newUser = new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone_number());
+        User newUser = new User(user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone_number());
         EntityManager em = null;
 
         try {
@@ -37,7 +38,7 @@ public class UserDaoJpa implements UserDao {
 
     @Override
     public void updateUser(User user) {
-        User newUser = new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone_number());
+        User newUser = new User(user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone_number());
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();

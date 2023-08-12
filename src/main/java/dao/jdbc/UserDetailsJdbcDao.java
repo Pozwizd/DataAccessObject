@@ -1,10 +1,12 @@
 package dao.jdbc;
 
-import dao.UserDetailsDao;
 import models.UserDetails;
 import utils.ConnectionPool;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 public class UserDetailsJdbcDao implements UserDetailsDao {

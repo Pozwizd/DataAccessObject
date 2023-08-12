@@ -1,11 +1,10 @@
 package dao.hibernate;
 
-import dao.OrderDao;
-import models.Order;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import Entity.Order;
 import utils.EntityManagerUtil;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 public class OrderOrmDao implements OrderDao{

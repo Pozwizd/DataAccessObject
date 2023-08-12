@@ -1,4 +1,4 @@
-package dao;
+package dao.jdbc;
 
 import models.UserDetails;
 
@@ -9,7 +9,6 @@ public interface UserDetailsDao {
     UserDetails getUserDetailsById(int userId);
 
     void updateUserDetails(int userId, UserDetails userDetails);
-
 
 
 }

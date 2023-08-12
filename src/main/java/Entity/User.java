@@ -1,22 +1,18 @@
-package models;
-
-import lombok.Getter;
-import lombok.Setter;
+package Entity;
 
 import javax.persistence.*;
 import java.util.List;
 
 
-@Setter
-@Getter
 @Entity
 @Table(name = "users", schema = "shop")
 public class User {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private int id;
+    private long id;
 
     @Column
     private String username;
@@ -24,33 +20,51 @@ public class User {
     @Column
     private String password;
 
+
     @Column
     private String email;
+
 
     @Column
     private String phone_number;
 
-    @OneToOne(mappedBy ="user")
+    @OneToOne(mappedBy = "user")
     private UserDetails userDetails;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy = "user")
     private List<ShoppingCart> shoppingCarts;
 
 
-    public User() {}
+    public User() {
+    }
 
-    public User(int id, String username, String password, String email, String phoneNumber) {
+    public User(long id, String username, String password, String email, String phone_number) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
-        this.phone_number = phoneNumber;
+        this.phone_number = phone_number;
+
     }
 
-    public User(String username, String password, String email, String phoneNumber) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.phone_number = phoneNumber;
+    public void setId(long id) {
+        this.id = id;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
+    }
+
 }

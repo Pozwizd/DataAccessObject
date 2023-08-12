@@ -1,6 +1,5 @@
 package dao.jdbc;
 
-import dao.UserDao;
 import models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

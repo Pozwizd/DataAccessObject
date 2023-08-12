@@ -1,10 +1,7 @@
 package jdbcDao;
 
 import dao.jdbc.OrderJdbcDao;
-import models.Order;
-import models.Product;
-import models.ShoppingCart;
-import models.User;
+import models.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.OrderService;

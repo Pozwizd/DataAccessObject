@@ -1,7 +1,6 @@
 package dao.jdbc;
 
 
-import dao.ProductDao;
 import models.Product;
 import utils.ConnectionPool;
 

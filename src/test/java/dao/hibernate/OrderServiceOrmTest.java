@@ -1,9 +1,9 @@
 package dao.hibernate;
 
-import models.Order;
-import models.Product;
-import models.ShoppingCart;
-import models.User;
+import Entity.Order;
+import Entity.Product;
+import Entity.ShoppingCart;
+import Entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.OrderServiceOrm;

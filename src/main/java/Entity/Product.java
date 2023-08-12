@@ -1,15 +1,11 @@
-package models;
-
-import lombok.Getter;
-import lombok.Setter;
+package Entity;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Setter
-@Getter
 @Entity(name = "product")
 public class Product {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,5 +43,7 @@ public class Product {
         this.price = price;
         this.quantity = quantity;
     }
+
+
 
 }

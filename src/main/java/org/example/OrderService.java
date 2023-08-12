@@ -1,7 +1,7 @@
 package org.example;
 
-import dao.OrderDao;
-import dao.ShoppingCartDao;
+import dao.jdbc.OrderDao;
+import dao.jdbc.ShoppingCartDao;
 import models.Order;
 import utils.ConnectionPool;
 

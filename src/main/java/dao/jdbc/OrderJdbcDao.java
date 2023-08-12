@@ -1,6 +1,5 @@
 package dao.jdbc;
 
-import dao.OrderDao;
 import models.Order;
 import utils.ConnectionPool;
 

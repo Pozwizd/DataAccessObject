@@ -1,6 +1,6 @@
 package dao.hibernate;
 
-import models.Product;
+import Entity.Product;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;

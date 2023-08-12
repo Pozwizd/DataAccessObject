@@ -1,8 +1,9 @@
 package dao.hibernate;
 
 
-import models.UserDetails;
+import Entity.UserDetails;
 import utils.EntityManagerUtil;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -35,7 +36,8 @@ public class UserDetailsOrmDao {
                 details.getLastName(),
                 details.getGender(),
                 details.getDateOfBirth(),
-                details.getAddress());
+                details.getAddress(),
+                details.getUser());
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
@@ -51,8 +53,6 @@ public class UserDetailsOrmDao {
                 em.close();
             }
         }
-
-
     }
 
     public UserDetails getUserDetailsById(int id) {

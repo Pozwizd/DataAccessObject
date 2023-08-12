@@ -1,7 +1,7 @@
 package dao.hibernate;
 
-import models.User;
-import models.UserDetails;
+import Entity.User;
+import Entity.UserDetails;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
