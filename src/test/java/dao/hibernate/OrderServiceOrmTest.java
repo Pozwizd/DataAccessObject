@@ -1,6 +1,5 @@
 package dao.hibernate;
 
-import jdbcDao.orderServiceTest;
 import models.Order;
 import models.Product;
 import models.ShoppingCart;
@@ -162,7 +161,7 @@ class OrderServiceOrmTest {
             em.close();
             assertEquals(orderFromDB.getOrderList(), order.getOrderList());
             assertEquals(orderFromDB.getTotalPrice(), order.getTotalPrice());
-            assertEquals(orderFromDB.getUserId(), order.getUserId());
+            assertEquals(orderFromDB.getUser_Id(), order.getUser_Id());
         } catch (Exception e) {
             logger.error(e);
         } finally {

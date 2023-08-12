@@ -3,7 +3,6 @@ package models;
 import lombok.Getter;
 import lombok.Setter;
 
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -31,14 +30,12 @@ public class User {
     @Column
     private String phone_number;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy ="user")
     private UserDetails userDetails;
 
     @OneToMany(mappedBy="user")
     private List<ShoppingCart> shoppingCarts;
 
-    @OneToMany(mappedBy="user")
-    private List<Order> orders;
 
     public User() {}
 

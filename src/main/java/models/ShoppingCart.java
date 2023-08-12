@@ -19,6 +19,8 @@ public class ShoppingCart {
 
     private int productId;
 
+
+
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName="id")
     private User user;

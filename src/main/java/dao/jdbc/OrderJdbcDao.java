@@ -21,7 +21,7 @@ public class OrderJdbcDao implements OrderDao {
             PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO orders (user_id, order_list, total_price) VALUES (?, ?, ?)");
 
-            stmt.setInt(1, order.getUserId());
+            stmt.setInt(1, order.getUser_Id());
             stmt.setString(2, order.getOrderList());
             stmt.setDouble(3, order.getTotalPrice());
             stmt.executeUpdate();

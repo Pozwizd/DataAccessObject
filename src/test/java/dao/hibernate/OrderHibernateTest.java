@@ -52,6 +52,7 @@ public class OrderHibernateTest {
             em.persist(user);
             em.persist(user2);
             em.getTransaction().commit();
+            logger.info("User created for testing");
         } catch (Exception e) {
             logger.info("Error creating user for testing");
         } finally {
@@ -172,7 +173,7 @@ public class OrderHibernateTest {
             em = EntityManagerUtil.getEntityManager();
             Order orderFromDb = em.find(Order.class, 1);
             assertEquals(orderFromDb.getOrderId(), order.getOrderId());
-            assertEquals(orderFromDb.getUserId(), order.getUserId());
+            assertEquals(orderFromDb.getUser_Id(), order.getUser_Id());
             assertEquals(orderFromDb.getOrderList(), order.getOrderList());
             assertEquals(orderFromDb.getTotalPrice(), order.getTotalPrice());
             logger.info("Order created successfully");
@@ -208,7 +209,7 @@ public class OrderHibernateTest {
         List<Order> orders = orderOrmDao.getUserOrders(1);
         assertEquals(orders.size(), 1);
         assertEquals(orders.get(0).getOrderId(), order.getOrderId());
-        assertEquals(orders.get(0).getUserId(), order.getUserId());
+        assertEquals(orders.get(0).getUser_Id(), order.getUser_Id());
         assertEquals(orders.get(0).getOrderList(), order.getOrderList());
         assertEquals(orders.get(0).getTotalPrice(), order.getTotalPrice());
         logger.info("Order retrieved successfully");
@@ -252,15 +253,15 @@ public class OrderHibernateTest {
         List<Order> orders = orderOrmDao.getAllOrders();
         assertEquals(orders.size(), 3);
         assertEquals(orders.get(0).getOrderId(), order.getOrderId());
-        assertEquals(orders.get(0).getUserId(), order.getUserId());
+        assertEquals(orders.get(0).getUser_Id(), order.getUser_Id());
         assertEquals(orders.get(0).getOrderList(), order.getOrderList());
         assertEquals(orders.get(0).getTotalPrice(), order.getTotalPrice());
         assertEquals(orders.get(1).getOrderId(), order2.getOrderId());
-        assertEquals(orders.get(1).getUserId(), order2.getUserId());
+        assertEquals(orders.get(1).getUser_Id(), order2.getUser_Id());
         assertEquals(orders.get(1).getOrderId(), order2.getOrderId());
         assertEquals(orders.get(1).getTotalPrice(), order2.getTotalPrice());
         assertEquals(orders.get(2).getOrderId(), order2.getOrderId());
-        assertEquals(orders.get(2).getUserId(), order2.getUserId());
+        assertEquals(orders.get(2).getUser_Id(), order2.getUser_Id());
         assertEquals(orders.get(2).getOrderId(), order2.getOrderId());
         assertEquals(orders.get(2).getTotalPrice(), order2.getTotalPrice());
         logger.info("All orders retrieved successfully");

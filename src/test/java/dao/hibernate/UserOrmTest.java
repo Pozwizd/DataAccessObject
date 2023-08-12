@@ -35,7 +35,7 @@ public class UserOrmTest {
             stmt = connection.prepareStatement("ALTER TABLE users AUTO_INCREMENT = 1;");
             stmt.executeUpdate();
             stmt.close();
-
+            logger.info("Clear table after test");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -58,8 +58,13 @@ public class UserOrmTest {
             em = EntityManagerUtil.getEntityManager();
             User savedUser = em.find(User.class, user.getId());
             logger.info(savedUser.getUsername());
-            assertEquals(1, savedUser.getId());
+            assertEquals(user.getId(), savedUser.getId());
+            assertEquals(user.getUsername(), savedUser.getUsername());
+            assertEquals(user.getPassword(), savedUser.getPassword());
             assertEquals(user.getEmail(), savedUser.getEmail());
+            assertEquals(user.getPhone_number(), savedUser.getPhone_number());
+            logger.info("User successfully created");
+
         } finally {
             if(em != null) {
                 em.close();
@@ -69,23 +74,25 @@ public class UserOrmTest {
 
     @Test
     public void testGetUserById() {
-
-        EntityManager em = EntityManagerUtil.getEntityManager();
-
-        em.getTransaction().begin();
-        User user = new User(
+        User user = new User(1,
                 "user1",
                 "password1",
                 "user1@email.com",
                 "123456");
-
+        EntityManager em = null;
         try {
-            em.persist(user);
+            em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
+            User user1 = em.merge(user);
+            em.persist(user1);
             em.getTransaction().commit();
-            User foundUser = userDaoJpa.getUserById(1);
-            assertEquals(1, foundUser.getId());
-            assertEquals("user1@email.com", foundUser.getEmail());
-
+            User foundUser = userDaoJpa.getUserById(user.getId());
+            assertEquals(user.getId(), foundUser.getId());
+            assertEquals(user.getUsername(), foundUser.getUsername());
+            assertEquals(user.getPassword(), foundUser.getPassword());
+            assertEquals(user.getEmail(), foundUser.getEmail());
+            assertEquals(user.getPhone_number(), foundUser.getPhone_number());
+            logger.info("User successfully retrieved by id");
         } catch (Exception ex) {
             em.getTransaction().rollback();
             throw ex;
@@ -118,21 +125,18 @@ public class UserOrmTest {
                     "Roman");
             userDaoJpa.updateUser(updateUser);
             em = EntityManagerUtil.getEntityManager();
-            User mergedUser = em.find(User.class, 1);
-
-
-            assertEquals(updateUser.getUsername(), mergedUser.getUsername());
-            assertEquals(updateUser.getEmail(), mergedUser.getEmail());
-
+            User mergedUser = em.find(User.class, updateUser.getId());
+            assertEquals(mergedUser.getUsername(), updateUser.getUsername());
+            assertEquals(mergedUser.getPassword(), updateUser.getPassword());
+            assertEquals(mergedUser.getEmail(), updateUser.getEmail());
+            assertEquals(mergedUser.getPhone_number(), updateUser.getPhone_number());
+            logger.info("User successfully updated");
         } catch (Exception ex) {
             em.getTransaction().rollback();
             throw ex;
         } finally {
             em.close();
         }
-
-
-
     }
 
     @Test

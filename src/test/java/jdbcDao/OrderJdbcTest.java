@@ -185,7 +185,7 @@ public class OrderJdbcTest {
                 Order actualOrder = new Order(order_id, user_id, order_list, total_price);
 
                 assertEquals(order.getOrderId(), actualOrder.getOrderId());
-                assertEquals(order.getUserId(), actualOrder.getUserId());
+                assertEquals(order.getUser_Id(), actualOrder.getUser_Id());
                 assertEquals(order.getOrderList(), actualOrder.getOrderList());
                 assertEquals(order.getTotalPrice(), actualOrder.getTotalPrice());
                 logger.info("Order has successfully been created");
@@ -209,7 +209,7 @@ public class OrderJdbcTest {
             PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO shop.orders (user_id, order_list, total_price) VALUES (?, ?, ?)");
 
-            stmt.setInt(1, order.getUserId());
+            stmt.setInt(1, order.getUser_Id());
             stmt.setString(2, order.getOrderList());
             stmt.setDouble(3, order.getTotalPrice());
             stmt.executeUpdate();
@@ -223,7 +223,7 @@ public class OrderJdbcTest {
         List<Order> orders = orderJdbcDao.getUserOrders(1);
 
         assertEquals(orders.get(0).getOrderId(), order.getOrderId());
-        assertEquals(orders.get(0).getUserId(), order.getUserId());
+        assertEquals(orders.get(0).getUser_Id(), order.getUser_Id());
         assertEquals(orders.get(0).getOrderList(), order.getOrderList());
         assertEquals(orders.get(0).getTotalPrice(), order.getTotalPrice());
         logger.info("Orders have been successfully received");
@@ -252,21 +252,21 @@ public class OrderJdbcTest {
                     "INSERT INTO orders (order_id, user_id, order_list, total_price) VALUES (?, ?, ?, ?)");
 
             stmt.setInt(1, order.getOrderId());
-            stmt.setInt(2, order.getUserId());
+            stmt.setInt(2, order.getUser_Id());
             stmt.setString(3, order.getOrderList());
             stmt.setDouble(4, order.getTotalPrice());
             stmt.executeUpdate();
 
 
             stmt.setInt(1, order2.getOrderId());
-            stmt.setInt(2, order2.getUserId());
+            stmt.setInt(2, order2.getUser_Id());
             stmt.setString(3, order2.getOrderList());
             stmt.setDouble(4, order2.getTotalPrice());
             stmt.executeUpdate();
 
 
             stmt.setInt(1, order3.getOrderId());
-            stmt.setInt(2, order3.getUserId());
+            stmt.setInt(2, order3.getUser_Id());
             stmt.setString(3, order3.getOrderList());
             stmt.setDouble(4, order3.getTotalPrice());
             stmt.executeUpdate();
@@ -280,7 +280,7 @@ public class OrderJdbcTest {
 
         for(int i = 0; i < orders.size() ; i++){
             assertEquals(orders.get(i).getOrderId(), extendOrders.get(i).getOrderId());
-            assertEquals(orders.get(i).getUserId(),  extendOrders.get(i).getUserId());
+            assertEquals(orders.get(i).getUser_Id(),  extendOrders.get(i).getUser_Id());
             assertEquals(orders.get(i).getOrderList(), extendOrders.get(i).getOrderList());
             assertEquals(orders.get(i).getTotalPrice(), extendOrders.get(i).getTotalPrice());
         }

@@ -31,19 +31,19 @@ public class UserDetailsOrmTest {
                 "userPassword1",
                 "user1@example.com",
                 "123456");
-        EntityManager entityManager = null;
+        EntityManager em = null;
         try {
-            entityManager = EntityManagerUtil.getEntityManager();
-            entityManager.getTransaction().begin();
-            User userMerge = entityManager.merge(extentedUser);
-            entityManager.persist(userMerge);
-            entityManager.getTransaction().commit();
+            em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
+            em.merge(extentedUser);
+            em.persist(extentedUser);
+            em.getTransaction().commit();
+            em.close();
         } catch (Exception e) {
             logger.error(e);
-            entityManager.getTransaction().rollback();
         } finally {
-            if (entityManager != null) {
-                entityManager.close();
+            if (em != null) {
+                em.close();
             }
         }
     }
@@ -88,6 +88,7 @@ public class UserDetailsOrmTest {
             Assertions.assertEquals(details.getDateOfBirth(), userDetails.getDateOfBirth());
             Assertions.assertEquals(details.getAddress(), userDetails.getAddress());
             Assertions.assertEquals(details.getUserId(), userDetails.getUserId());
+
         } finally {
             if (em != null) {
                 em.close();

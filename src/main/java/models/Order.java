@@ -7,8 +7,8 @@ import javax.persistence.*;
 
 @Setter
 @Getter
-@Entity(name = "orders")
-@Table(schema = "shop", name = "orders")
+@Entity
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -16,10 +16,10 @@ public class Order {
     @Column(name="order_id")
     private int orderId;
 
-    private int userId;
+    private int user_Id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName="id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name="order_list")
@@ -30,15 +30,15 @@ public class Order {
 
     public Order() {}
 
-    public Order(int orderId, int userId, String orderList, double totalPrice) {
+    public Order(int orderId, int user_Id, String orderList, double totalPrice) {
         this.orderId = orderId;
-        this.userId = userId;
+        this.user_Id = user_Id;
         this.orderList = orderList;
         this.totalPrice = totalPrice;
     }
 
-    public Order(int userId, String orderList, double totalPrice) {
-        this.userId = userId;
+    public Order(int user_Id, String orderList, double totalPrice) {
+        this.user_Id = user_Id;
         this.orderList = orderList;
         this.totalPrice = totalPrice;
     }

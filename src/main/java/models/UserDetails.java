@@ -9,12 +9,7 @@ import java.util.Date;
 @Setter
 @Getter
 @Entity(name="user_details")
-@Table(schema = "shop")
 public class UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @Column(name="first_name")
     private String firstName;
@@ -32,10 +27,13 @@ public class UserDetails {
     @Column
     private String address;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id")
     private int userId;
 
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @OneToOne
+    @JoinColumn(name="user_id")
     private User user;
 
     public UserDetails() {}

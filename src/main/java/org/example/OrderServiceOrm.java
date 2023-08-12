@@ -27,7 +27,7 @@ public class OrderServiceOrm {
         em.getTransaction().begin();
 
         Query query = em.createQuery( "SELECT p.productName, s.quantity " +
-                "FROM Product p JOIN p.shoppingCarts s " +
+                "FROM product p JOIN p.shoppingCarts s " +
                 "WHERE s.user.id = :userId");
 
         query.setParameter("userId", userId);
@@ -47,7 +47,8 @@ public class OrderServiceOrm {
         int totalPrice = calculateTotalPrice(userId);
 
         Order order = new Order(userId, productNames, totalPrice);
-        Query queryDelete = em.createQuery("DELETE FROM shopping_cart sc WHERE sc.user.id = :userId");
+        Query queryDelete = em.createQuery("DELETE FROM shopping_cart sc " +
+                "WHERE sc.user.id = :userId");
         queryDelete.setParameter("userId", userId);
         queryDelete.executeUpdate();
         em.getTransaction().commit();
@@ -62,7 +63,7 @@ public class OrderServiceOrm {
         em.getTransaction().begin();
 
         Query query = em.createQuery( "SELECT SUM(p.price * s.quantity) " +
-                "FROM Product p JOIN p.shoppingCarts s " +
+                "FROM product p JOIN p.shoppingCarts s " +
                 "WHERE s.user.id = :userId");
 
         query.setParameter("userId", userId);
