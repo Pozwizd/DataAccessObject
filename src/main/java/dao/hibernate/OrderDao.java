@@ -8,7 +8,7 @@ public interface OrderDao {
 
     void createOrder(Order order);
 
-    List<Order> getUserOrders(int userId);
+    List<Order> getUserOrders(long userId);
 
     List<Order> getAllOrders();
 

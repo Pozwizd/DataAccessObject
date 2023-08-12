@@ -11,7 +11,7 @@ public interface UserDao {
 
     void updateUser(User user);
 
-    User getUserById(int id);
+    User getUserById(long id);
 
     List<User> getAllUsers() throws SQLException;
 

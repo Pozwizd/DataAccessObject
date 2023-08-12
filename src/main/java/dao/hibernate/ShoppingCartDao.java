@@ -11,8 +11,8 @@ public interface ShoppingCartDao {
 
     void removeProductFromCart(ShoppingCart shoppingCart);
 
-    List<ShoppingCart> getUserCartProducts(int userId);
+    List<ShoppingCart> getUserCartProducts(long userId);
 
-    void clearUserCart(int userId);
+    void clearUserCart(long userId);
 
 }

@@ -1,10 +1,7 @@
 package Entity;
 
-import lombok.Getter;
-
 import javax.persistence.*;
 
-@Getter
 @Entity(name = "shopping_cart")
 public class ShoppingCart {
 
@@ -24,7 +21,6 @@ public class ShoppingCart {
     private int quantity;
 
     public ShoppingCart() {
-
     }
 
     public ShoppingCart(Long id, User user, Product product, int quantity) {
@@ -34,17 +30,32 @@ public class ShoppingCart {
         this.quantity = quantity;
     }
 
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     public void setQuantity(int quantity) {

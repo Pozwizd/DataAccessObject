@@ -29,7 +29,7 @@ public class OrderOrmDao implements OrderDao{
     }
 
     @Override
-    public List<Order> getUserOrders(int userId) {
+    public List<Order> getUserOrders(long userId) {
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();

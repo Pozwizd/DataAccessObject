@@ -55,7 +55,7 @@ public class UserDetailsOrmDao {
         }
     }
 
-    public UserDetails getUserDetailsById(int id) {
+    public UserDetails getUserDetailsById(long id) {
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();

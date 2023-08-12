@@ -4,11 +4,11 @@ import Entity.UserDetails;
 
 public interface UserDetailsDao {
 
-    void createUserDetails(int userId, UserDetails details);
+    void createUserDetails(long userId, UserDetails details);
 
-    UserDetails getUserDetailsById(int userId);
+    UserDetails getUserDetailsById(long userId);
 
-    void updateUserDetails(int userId, UserDetails userDetails);
+    void updateUserDetails(long userId, UserDetails userDetails);
 
 
 

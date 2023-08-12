@@ -57,7 +57,7 @@ public class ShoppingCartOrmDao implements ShoppingCartDao {
     }
 
     @Override
-    public List<ShoppingCart> getUserCartProducts(int userId) {
+    public List<ShoppingCart> getUserCartProducts(long userId) {
         EntityManager em = null;
         ArrayList<ShoppingCart> shoppingCartList = new ArrayList<>();
         try {
@@ -78,7 +78,7 @@ public class ShoppingCartOrmDao implements ShoppingCartDao {
     }
 
     @Override
-    public void clearUserCart(int userId) {
+    public void clearUserCart(long userId) {
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();

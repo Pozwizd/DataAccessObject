@@ -1,11 +1,7 @@
 package Entity;
 
-import lombok.Getter;
-
 import javax.persistence.*;
 
-
-@Getter
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -35,16 +31,32 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void setId(int id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
 
+    public String getOrderList() {
+        return orderList;
+    }
+
     public void setOrderList(String orderList) {
         this.orderList = orderList;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
     public void setTotalPrice(double totalPrice) {

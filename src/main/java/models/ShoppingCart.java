@@ -10,7 +10,6 @@ public class ShoppingCart {
 
     private int quantity;
 
-
     public ShoppingCart(int userId, int productId, int quantity) {
         this.userId = userId;
         this.productId = productId;

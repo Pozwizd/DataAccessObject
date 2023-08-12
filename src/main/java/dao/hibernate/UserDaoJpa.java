@@ -12,7 +12,7 @@ public class UserDaoJpa implements UserDao {
 
     @Override
     public void createUser(User user) {
-        User newUser = new User(user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone_number());
+        User newUser = new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone_number());
         EntityManager em = null;
 
         try {
@@ -59,7 +59,7 @@ public class UserDaoJpa implements UserDao {
     }
 
     @Override
-    public User getUserById(int id) {
+    public User getUserById(long id) {
 
         EntityManager em = null;
         try {

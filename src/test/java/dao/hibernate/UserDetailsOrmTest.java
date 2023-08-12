@@ -23,6 +23,12 @@ public class UserDetailsOrmTest {
 
     UserDetailsOrmDao userDetailsOrmDao = new UserDetailsOrmDao();
 
+    private User user = new User(1,
+            "user1",
+            "userPassword1",
+            "user1@example.com",
+            "123456");
+
 
     @BeforeEach
     public void createUserBeforeUserDetailsTest() {
@@ -73,7 +79,8 @@ public class UserDetailsOrmTest {
                 "Петренко",
                 "male",
                 new Date(1980, 1, 1),
-                "Київ, вул. Шевченка 10");
+                "Київ, вул. Шевченка 10",
+                user);
 
         userDetailsOrmDao.createUserDetails(details);
 

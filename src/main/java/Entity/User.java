@@ -20,10 +20,8 @@ public class User {
     @Column
     private String password;
 
-
     @Column
     private String email;
-
 
     @Column
     private String phone_number;
@@ -47,24 +45,67 @@ public class User {
 
     }
 
+    public User(String username, String password, String email, String phone_number) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone_number = phone_number;
+
+    }
+
+    public long getId() {
+        return id;
+    }
+
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
+    public String getPhone_number() {
+        return phone_number;
+    }
+
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
     }
 
+    public UserDetails getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
+    }
+
+    public List<ShoppingCart> getShoppingCarts() {
+        return shoppingCarts;
+    }
+
+    public void setShoppingCarts(List<ShoppingCart> shoppingCarts) {
+        this.shoppingCarts = shoppingCarts;
+    }
 }
