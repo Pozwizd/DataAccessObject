@@ -58,7 +58,7 @@ public class UserDaoJdbc implements UserDao {
                 int id_user = rs.getInt("id");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
-                String email = rs.getString("email");;
+                String email = rs.getString("email");
                 String phoneNumber = rs.getString("phone_number");
                 user = new User(id_user,
                         username,
@@ -111,7 +111,7 @@ public class UserDaoJdbc implements UserDao {
                 int id = rs.getInt("id");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
-                String email = rs.getString("email");;
+                String email = rs.getString("email");
                 String phoneNumber = rs.getString("phone_number");
                 User user = new User(id,
                         username,

@@ -1,8 +1,7 @@
 package org.example;
 
 import Entity.Order;
-import dao.hibernate.OrderOrmDao;
-import dao.hibernate.ShoppingCartOrmDao;
+import Entity.User;
 import org.hibernate.SessionFactory;
 import utils.EntityManagerUtil;
 
@@ -15,65 +14,61 @@ public class OrderServiceOrm {
 
     private SessionFactory sessionFactory;
 
-    private ShoppingCartOrmDao cartDao;
-    private OrderOrmDao orderDao;
+    public Order createOrder(int userId) {
 
+        EntityManager em = null;
 
-    public Order makeOrder(int userId) {
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
+            // Получить пользователя
+            User user = em.find(User.class, userId);
 
-        EntityManager em = EntityManagerUtil.getEntityManager();
+            // Получить товары и кол-во из корзины
+            Query query = em.createQuery("SELECT p.productName, sc.quantity" +
+                    " FROM shopping_cart sc JOIN product p WHERE sc.user.id = :userId");
+            query.setParameter("userId", userId);
 
-        em.getTransaction().begin();
+            List<String> productNames = new ArrayList<>();
+            List<Integer> quantities = new ArrayList<>();
 
-        Query query = em.createQuery( "SELECT p.productName, s.quantity " +
-                "FROM product p JOIN p.shoppingCarts s " +
-                "WHERE s.user.id = :userId");
+            for(Object[] row : (List<Object[]>)query.getResultList()) {
+                productNames.add((String)row[0]);
+                quantities.add((Integer)row[1]);
+            }
 
-        query.setParameter("userId", userId);
+            // Сформировать список товаров
+            String productList = getProductNames(productNames, quantities);
+            em.close();
+            em = EntityManagerUtil.getEntityManager();
+            // Рассчитать стоимость
+            Query priceQuery = em.createQuery("SELECT SUM(p.price * s.quantity) FROM product p JOIN p.shoppingCarts s WHERE s.user.id = :userId");
+            priceQuery.setParameter("userId", userId);
+            double totalPrice = priceQuery.getFirstResult();
 
-        List<Object[]> results = query.getResultList();
+            // Создать и сохранить заказ
+            em.close();
+            em = EntityManagerUtil.getEntityManager();
 
-        List<String> products = new ArrayList<>();
-        List<Integer> quantities = new ArrayList<>();
+            Order order = new Order();
+            order.setUser(user);
+            order.setOrderList(productList);
+            order.setTotalPrice(totalPrice);
 
-        for(Object[] row : results) {
-            products.add((String)row[0]);
-            quantities.add((Integer)row[1]);
+            // Очистить корзину
+            Query deleteQuery = em.createQuery("DELETE FROM shopping_cart sc WHERE sc.user.id = :userId");
+            deleteQuery.setParameter("userId", userId);
+            deleteQuery.executeUpdate();
+            em.getTransaction().commit();
+            return order;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if(em != null)
+                em.close(); // (5)
         }
-
-        String productNames = getProductNames(products, quantities);
-
-        int totalPrice = calculateTotalPrice(userId);
-
-        Order order = new Order(userId, productNames, totalPrice);
-        Query queryDelete = em.createQuery("DELETE FROM shopping_cart sc " +
-                "WHERE sc.user.id = :userId");
-        queryDelete.setParameter("userId", userId);
-        queryDelete.executeUpdate();
-        em.getTransaction().commit();
-        em.close();
-        return order;
     }
-
-    private int calculateTotalPrice(int userId) {
-
-        EntityManager em = EntityManagerUtil.getEntityManager();
-
-        em.getTransaction().begin();
-
-        Query query = em.createQuery( "SELECT SUM(p.price * s.quantity) " +
-                "FROM product p JOIN p.shoppingCarts s " +
-                "WHERE s.user.id = :userId");
-
-        query.setParameter("userId", userId);
-
-        int totalPrice = (int)query.getSingleResult();
-
-        em.getTransaction().commit();
-
-        return totalPrice;
-    }
-
     private String getProductNames(List<String> products, List<Integer> quantity) {
 
         StringBuilder builder = new StringBuilder();
@@ -91,5 +86,5 @@ public class OrderServiceOrm {
 
         return builder.toString();
     }
-}
 
+}

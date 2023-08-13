@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class ConnectionPool {
 
-    private static BasicDataSource dataSource;
+    private static final BasicDataSource dataSource;
 
     static {
         dataSource = new BasicDataSource();

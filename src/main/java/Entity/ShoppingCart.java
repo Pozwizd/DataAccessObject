@@ -6,7 +6,6 @@ import javax.persistence.*;
 public class ShoppingCart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -23,19 +22,10 @@ public class ShoppingCart {
     public ShoppingCart() {
     }
 
-    public ShoppingCart(Long id, User user, Product product, int quantity) {
-        this.id = id;
+    public ShoppingCart(User user, Product product, int quantity) {
         this.user = user;
         this.product = product;
         this.quantity = quantity;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public User getUser() {

@@ -8,7 +8,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "order_id")
+    @Column
     private int id;
 
     @ManyToOne

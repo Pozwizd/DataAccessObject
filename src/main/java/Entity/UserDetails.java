@@ -1,10 +1,13 @@
 package Entity;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity(name = "user_details")
 public class UserDetails {
+
+    @Id
+    long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -16,7 +19,7 @@ public class UserDetails {
     private Gender gender;
 
     @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    private Date dateOfBirth;
 
     @Column
     private String address;
@@ -28,7 +31,7 @@ public class UserDetails {
     public UserDetails() {
     }
 
-    public UserDetails(String firstName, String lastName, Gender gender, LocalDate dateOfBirth, String address, User user) {
+    public UserDetails(String firstName, String lastName, Gender gender, Date dateOfBirth, String address, User user) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -61,11 +64,11 @@ public class UserDetails {
         this.gender = gender;
     }
 
-    public LocalDate getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

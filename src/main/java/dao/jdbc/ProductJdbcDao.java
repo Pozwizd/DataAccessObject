@@ -105,7 +105,6 @@ public class ProductJdbcDao implements ProductDao {
                 int id = rs.getInt("id");
                 String product_name = rs.getString("product_name");
                 String description = rs.getString("description");
-                ;
                 double price = rs.getDouble("price");
                 int quantity = rs.getInt("quantity");
 

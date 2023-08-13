@@ -247,7 +247,7 @@ public class OrderJdbcTest {
 
         try(Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO orders (order_id, user_id, order_list, total_price) VALUES (?, ?, ?, ?)");
+                    "INSERT INTO orders (id, user_id, order_list, total_price) VALUES (?, ?, ?, ?)");
 
             stmt.setInt(1, order.getOrderId());
             stmt.setInt(2, order.getUser_Id());

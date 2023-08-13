@@ -27,21 +27,55 @@ public class OrderHibernateTest {
 
     OrderOrmDao orderOrmDao = new OrderOrmDao();
 
+    private final User user = new User(1,
+            "user1",
+            "userPassword1",
+            "user1@example.com",
+            "123456");
+
+    private final User user2 = new User(2,
+            "user2",
+            "userPassword2",
+            "user2@example.com",
+            "654321");
+
+    private final Product product = new Product(1,
+            "AMD Ryzen 9 5950X",
+            "16-Core 3.4 GHz CPU",
+            999.99,
+            10);
+
+    private final Product product2 = new Product(2,
+            "Intel Core i9-11900K",
+            "8-Core 3.5 GHz CPU",
+            699.99,
+            12);
+
+    private final ShoppingCart shoppingCart = new ShoppingCart(user,product,4);
+    private final ShoppingCart shoppingCart2 = new ShoppingCart(user,product2,1);
+
+    private final ShoppingCart shoppingCartUser2 = new ShoppingCart(user2,product,4);
+    private final ShoppingCart shoppingCartUser2_2 = new ShoppingCart(user2,product2,1);
+
+    Order order = new Order(1,
+            user,
+            "AMD Ryzen 9 5950X * 1, Intel Core i9-11900K * 1",
+            4695.00);
+
+    Order order2 = new Order(2,
+            user2,
+            "AMD Ryzen 5 5950X * 5, Intel Core i9-11900K * 2",
+            5000);
+
+    Order order3 = new Order(3,
+            user,
+            "AMD Ryzen 7 5950X * 4, Intel Core i9-11900K * 1",
+            6000);
+
+
 
     @BeforeEach
     public void createObjectsForTesting() {
-
-        User user = new User(1,
-                "user1",
-                "userPassword1",
-                "user1@example.com",
-                "123456");
-
-        User user2 = new User(2,
-                "user2",
-                "userPassword2",
-                "user2@example.com",
-                "654321");
 
         EntityManager em = null;
         try {
@@ -61,19 +95,6 @@ public class OrderHibernateTest {
             }
         }
 
-
-        Product product = new Product(1,
-                "AMD Ryzen 9 5950X",
-                "16-Core 3.4 GHz CPU",
-                999.99,
-                10);
-
-        Product product2 = new Product(2,
-                "Intel Core i9-11900K",
-                "8-Core 3.5 GHz CPU",
-                699.99,
-                12);
-
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
@@ -89,12 +110,6 @@ public class OrderHibernateTest {
                 em.close();
             }
         }
-
-        ShoppingCart shoppingCart = new ShoppingCart(1, 1, 4);
-        ShoppingCart shoppingCart2 = new ShoppingCart(1, 2, 1);
-
-        ShoppingCart shoppingCartUser2 = new ShoppingCart(2, 1, 4);
-        ShoppingCart shoppingCartUser2_2 = new ShoppingCart(2, 2, 1);
 
         try {
             em = EntityManagerUtil.getEntityManager();
@@ -116,7 +131,6 @@ public class OrderHibernateTest {
                 em.close();
             }
         }
-
     }
 
     @AfterEach
@@ -161,19 +175,14 @@ public class OrderHibernateTest {
 
     @Test
     public void createOrderTest() {
-        Order order = new Order(1,
-                1,
-                "AMD Ryzen 9 5950X * 4, Intel Core i9-11900K * 1",
-                4695.00);
-
         orderOrmDao.createOrder(order);
 
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
             Order orderFromDb = em.find(Order.class, 1);
-            assertEquals(orderFromDb.getOrderId(), order.getOrderId());
-            assertEquals(orderFromDb.getUser_Id(), order.getUser_Id());
+            assertEquals(orderFromDb.getId(), order.getId());
+            assertEquals(orderFromDb.getUser().getId(), order.getUser().getId());
             assertEquals(orderFromDb.getOrderList(), order.getOrderList());
             assertEquals(orderFromDb.getTotalPrice(), order.getTotalPrice());
             logger.info("Order created successfully");
@@ -188,10 +197,6 @@ public class OrderHibernateTest {
 
     @Test
     public void getUserOrdersTest() {
-        Order order = new Order(1,
-                1,
-                "AMD Ryzen 9 5950X * 4, Intel Core i9-11900K * 1",
-                4695.00);
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
@@ -208,8 +213,8 @@ public class OrderHibernateTest {
         }
         List<Order> orders = orderOrmDao.getUserOrders(1);
         assertEquals(orders.size(), 1);
-        assertEquals(orders.get(0).getOrderId(), order.getOrderId());
-        assertEquals(orders.get(0).getUser_Id(), order.getUser_Id());
+        assertEquals(orders.get(0).getId(), order.getId());
+        assertEquals(orders.get(0).getUser().getId(), order.getUser().getId());
         assertEquals(orders.get(0).getOrderList(), order.getOrderList());
         assertEquals(orders.get(0).getTotalPrice(), order.getTotalPrice());
         logger.info("Order retrieved successfully");
@@ -217,21 +222,6 @@ public class OrderHibernateTest {
 
     @Test
     public void getAllOrdersTest() {
-        Order order = new Order(1,
-                1,
-                "AMD Ryzen 9 5950X * 4, Intel Core i9-11900K * 1",
-                4695.00);
-
-        Order order2 = new Order(2,
-                2,
-                "AMD Ryzen 5 5950X * 5, Intel Core i9-11900K * 2",
-                5000);
-
-        Order order3 = new Order(3,
-                3,
-                "AMD Ryzen 7 5950X * 1, Intel Core i9-11900K * 1",
-                6000);
-
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
@@ -252,18 +242,15 @@ public class OrderHibernateTest {
         }
         List<Order> orders = orderOrmDao.getAllOrders();
         assertEquals(orders.size(), 3);
-        assertEquals(orders.get(0).getOrderId(), order.getOrderId());
-        assertEquals(orders.get(0).getUser_Id(), order.getUser_Id());
+        assertEquals(orders.get(0).getId(), order.getId());
         assertEquals(orders.get(0).getOrderList(), order.getOrderList());
         assertEquals(orders.get(0).getTotalPrice(), order.getTotalPrice());
-        assertEquals(orders.get(1).getOrderId(), order2.getOrderId());
-        assertEquals(orders.get(1).getUser_Id(), order2.getUser_Id());
-        assertEquals(orders.get(1).getOrderId(), order2.getOrderId());
+        assertEquals(orders.get(1).getId(), order2.getId());
+        assertEquals(orders.get(1).getOrderList(), order2.getOrderList());
         assertEquals(orders.get(1).getTotalPrice(), order2.getTotalPrice());
-        assertEquals(orders.get(2).getOrderId(), order2.getOrderId());
-        assertEquals(orders.get(2).getUser_Id(), order2.getUser_Id());
-        assertEquals(orders.get(2).getOrderId(), order2.getOrderId());
-        assertEquals(orders.get(2).getTotalPrice(), order2.getTotalPrice());
+        assertEquals(orders.get(2).getId(), order3.getId());
+        assertEquals(orders.get(2).getOrderList(), order3.getOrderList());
+        assertEquals(orders.get(2).getTotalPrice(), order3.getTotalPrice());
         logger.info("All orders retrieved successfully");
     }
 }

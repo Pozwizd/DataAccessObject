@@ -1,5 +1,6 @@
 package dao.hibernate;
 
+import Entity.Gender;
 import Entity.User;
 import Entity.UserDetails;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +24,7 @@ public class UserDetailsOrmTest {
 
     UserDetailsOrmDao userDetailsOrmDao = new UserDetailsOrmDao();
 
-    private User user = new User(1,
+    private final User user = new User(1,
             "user1",
             "userPassword1",
             "user1@example.com",
@@ -77,7 +78,7 @@ public class UserDetailsOrmTest {
         LogManager.getLogger(org.hibernate.Version.class);
         UserDetails details = new UserDetails("Іван",
                 "Петренко",
-                "male",
+                Gender.MALE,
                 new Date(1980, 1, 1),
                 "Київ, вул. Шевченка 10",
                 user);
@@ -94,7 +95,7 @@ public class UserDetailsOrmTest {
             Assertions.assertEquals(details.getGender(), userDetails.getGender());
             Assertions.assertEquals(details.getDateOfBirth(), userDetails.getDateOfBirth());
             Assertions.assertEquals(details.getAddress(), userDetails.getAddress());
-            Assertions.assertEquals(details.getUserId(), userDetails.getUserId());
+            Assertions.assertEquals(details.getUser().getId(), userDetails.getUser().getId());
 
         } finally {
             if (em != null) {
@@ -108,9 +109,10 @@ public class UserDetailsOrmTest {
         LogManager.getLogger(org.hibernate.Version.class);
         UserDetails details = new UserDetails("Іван",
                 "Петренко",
-                "male",
+                Gender.MALE,
                 new Date(1980, 1, 1),
-                "Київ, вул. Шевченка 10");
+                "Київ, вул. Шевченка 10",
+                user);
 
         EntityManager em = null;
         try {
@@ -125,7 +127,7 @@ public class UserDetailsOrmTest {
             Assertions.assertEquals(details.getGender(), userDetails.getGender());
             Assertions.assertEquals(details.getDateOfBirth(), userDetails.getDateOfBirth());
             Assertions.assertEquals(details.getAddress(), userDetails.getAddress());
-            Assertions.assertEquals(details.getUserId(), userDetails.getUserId());
+            Assertions.assertEquals(details.getUser().getId(), userDetails.getUser().getId());
         } catch (Exception e) {
             logger.error(e);
             em.getTransaction().rollback();
@@ -141,14 +143,16 @@ public class UserDetailsOrmTest {
     public void testUpdateUserDetails() {
         UserDetails userDetails = new UserDetails("Іван",
                 "Петренко",
-                "male",
-                new java.sql.Date(1980, 1, 1),
-                "Київ, вул. Шевченка 10");
+                Gender.MALE,
+                new Date(1980, 1, 1),
+                "Київ, вул. Шевченка 10",
+                user);
         UserDetails updateUserDetails = new UserDetails("Педро",
                 "Іванович",
-                "male",
+                Gender.MALE,
                 new java.sql.Date(1980, 12, 19),
-                "Київ, вул. Бандери 10");
+                "Київ, вул. Бандери 10",
+                user);
 
         EntityManager em = null;
         try {
@@ -168,7 +172,7 @@ public class UserDetailsOrmTest {
             Assertions.assertEquals(updateUserDetails.getGender(), userDetails1.getGender());
             Assertions.assertEquals(updateUserDetails.getDateOfBirth(), userDetails1.getDateOfBirth());
             Assertions.assertEquals(updateUserDetails.getAddress(), userDetails1.getAddress());
-            Assertions.assertEquals(updateUserDetails.getUserId(), userDetails1.getUserId());
+            Assertions.assertEquals(updateUserDetails.getUser().getId(), userDetails1.getUser().getId());
         } catch (Exception e) {
             logger.error(e);
             em.getTransaction().rollback();

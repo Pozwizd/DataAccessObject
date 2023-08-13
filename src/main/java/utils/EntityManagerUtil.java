@@ -7,7 +7,7 @@ import static javax.persistence.Persistence.createEntityManagerFactory;
 
 public class EntityManagerUtil {
 
-    private static EntityManagerFactory emf;
+    private static final EntityManagerFactory emf;
 
     static {
         emf = createEntityManagerFactory("myApp");

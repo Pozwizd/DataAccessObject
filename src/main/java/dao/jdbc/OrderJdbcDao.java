@@ -45,8 +45,8 @@ public class OrderJdbcDao implements OrderDao {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int orderId = rs.getInt("order_id");
-                userId = rs.getInt("user_Id");
+                int orderId = rs.getInt("id");
+                userId = rs.getInt("user_id");
                 String orderList = rs.getString("order_list");
                 int totalPrice = rs.getInt("total_price");
 
@@ -73,8 +73,8 @@ public class OrderJdbcDao implements OrderDao {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int orderId = rs.getInt("order_id");
-                int userId = rs.getInt("user_Id");
+                int orderId = rs.getInt("id");
+                int userId = rs.getInt("user_id");
                 String orderList = rs.getString("order_list");
                 int totalPrice = rs.getInt("total_price");
 
