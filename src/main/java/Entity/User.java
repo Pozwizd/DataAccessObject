@@ -3,11 +3,9 @@ package Entity;
 import javax.persistence.*;
 import java.util.List;
 
-
 @Entity
 @Table(name = "users", schema = "shop")
 public class User {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +30,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ShoppingCart> shoppingCarts;
 
-
     public User() {
     }
 
@@ -42,7 +39,6 @@ public class User {
         this.password = password;
         this.email = email;
         this.phone_number = phone_number;
-
     }
 
     public User(String username, String password, String email, String phone_number) {
@@ -50,7 +46,6 @@ public class User {
         this.password = password;
         this.email = email;
         this.phone_number = phone_number;
-
     }
 
     public long getId() {

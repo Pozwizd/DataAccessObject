@@ -62,7 +62,8 @@ public class ShoppingCartOrmDao implements ShoppingCartDao {
         ArrayList<ShoppingCart> shoppingCartList = new ArrayList<>();
         try {
             em = EntityManagerUtil.getEntityManager();
-            Query query = em.createQuery("from shopping_cart where userId =:userId");
+            Query query = em.createQuery("SELECT c FROM shopping_cart c JOIN c.user u WHERE u.id = :userId");
+//            Query query = em.createQuery("from shopping_cart where user.id =:userId");
             query.setParameter("userId", userId);
             shoppingCartList.add((ShoppingCart) query.getSingleResult());
         } catch (Exception e) {
@@ -82,7 +83,7 @@ public class ShoppingCartOrmDao implements ShoppingCartDao {
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
-            Query query = em.createQuery("delete from shopping_cart where userId =:userId");
+            Query query = em.createQuery("delete from shopping_cart where user.id =:userId");
             query.setParameter("userId", userId);
             query.executeUpdate();
         } catch (Exception e) {

@@ -43,7 +43,7 @@ public class UserOrmTest {
     public void testCreateUser() {
         LogManager.getLogger(org.hibernate.Version.class);
 
-        User user = new User(1,
+        User user = new User(1L,
                 "user1",
                 "userPassword1",
                 "user1@example.com",
@@ -72,7 +72,7 @@ public class UserOrmTest {
 
     @Test
     public void testGetUserById() {
-        User user = new User(1,
+        User user = new User(1L,
                 "user1",
                 "password1",
                 "user1@email.com",
@@ -115,7 +115,7 @@ public class UserOrmTest {
             em.getTransaction().commit();
             em.close();
 
-            User updateUser = new User(1,
+            User updateUser = new User(1L,
                     "Roman",
                     "newPassword",
                     "newEmail@example.com",
@@ -168,7 +168,7 @@ public class UserOrmTest {
         em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
-            User actualUser = em.find(User.class, 1);
+            User actualUser = em.find(User.class, 1L);
             assertNull(actualUser);
             logger.info("User deleted successfully");
         } finally {

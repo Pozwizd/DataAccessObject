@@ -1,6 +1,5 @@
 package dao.hibernate;
 
-
 import Entity.UserDetails;
 import utils.EntityManagerUtil;
 
@@ -43,6 +42,7 @@ public class UserDetailsOrmDao {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
             em.merge(userDetails);
+            em.persist(userDetails);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em != null) {

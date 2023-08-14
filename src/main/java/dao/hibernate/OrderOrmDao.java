@@ -34,7 +34,7 @@ public class OrderOrmDao implements OrderDao{
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            Query query = em.createQuery("SELECT o FROM orders o WHERE o.userId = :userId");
+            Query query = em.createQuery("SELECT o FROM Order o WHERE o.user.id = :userId");
             query.setParameter("userId", userId);
             List<Order> orders = query.getResultList();
             em.getTransaction().commit();
@@ -52,13 +52,16 @@ public class OrderOrmDao implements OrderDao{
         }
     }
 
+    /**
+     *
+     */
     @Override
     public List<Order> getAllOrders() {
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            Query query = em.createQuery("SELECT o FROM orders o");
+            Query query = em.createQuery("from Order");
             List<Order> orders = query.getResultList();
             em.getTransaction().commit();
             return orders;

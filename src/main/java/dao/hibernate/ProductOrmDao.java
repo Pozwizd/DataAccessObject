@@ -32,23 +32,29 @@ public class ProductOrmDao implements ProductDao {
 
     @Override
     public List<Product> getAllProducts() {
-        EntityManager em  = null;
-        ArrayList<Product> products = new ArrayList<>();
-        try {
-            em = EntityManagerUtil.getEntityManager();
-            products.add((Product) em.createQuery("from Product").getResultList());
-            em.close();
-        } catch (Exception e) {
-            if (em != null) {
-                em.getTransaction().rollback();
-            }
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-        return products;
+        EntityManager em = EntityManagerUtil.getEntityManager();
+        return em.createQuery("from product", Product.class).getResultList();
     }
+
+//    @Override
+//    public List<Product> getAllProducts() {
+//        EntityManager em  = null;
+//        ArrayList<Product> products = new ArrayList<>();
+//        try {
+//            em = EntityManagerUtil.getEntityManager();
+//            products.add((Product) em.createQuery("from product").getResultList());
+//            em.close();
+//        } catch (Exception e) {
+//            if (em != null) {
+//                em.getTransaction().rollback();
+//            }
+//        } finally {
+//            if (em != null) {
+//                em.close();
+//            }
+//        }
+//        return products;
+//    }
 
     @Override
     public Product getProductById(long productId) {
