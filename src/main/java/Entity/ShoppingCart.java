@@ -6,8 +6,6 @@ import javax.persistence.*;
 public class ShoppingCart {
 
     @Id
-    private Long id;
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

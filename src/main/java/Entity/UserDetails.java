@@ -6,9 +6,6 @@ import java.util.Date;
 @Entity(name = "user_details")
 public class UserDetails {
 
-    @Id
-    long id;
-
     @Column(name = "first_name")
     private String firstName;
 
@@ -24,6 +21,7 @@ public class UserDetails {
     @Column
     private String address;
 
+    @Id
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
