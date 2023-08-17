@@ -12,13 +12,12 @@ public class UserDaoJpa implements UserDao {
 
     @Override
     public void createUser(User user) {
-        User newUser = new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone_number());
         EntityManager em = null;
 
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            em.persist(newUser);
+            em.persist(user);
             em.getTransaction().commit();
 
         } catch (Exception e) {

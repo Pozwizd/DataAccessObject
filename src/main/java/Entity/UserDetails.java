@@ -1,16 +1,22 @@
 package Entity;
 
 import javax.persistence.*;
+import javax.persistence.GenerationType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(name = "user_details")
-public class UserDetails implements Serializable {
+public class UserDetails{
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+    @Id
+    private long id;
+
+    @MapsId
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "first_name")
     private String firstName;
@@ -28,21 +34,41 @@ public class UserDetails implements Serializable {
     @Column
     private String address;
 
-    @Id
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
 
     public UserDetails() {
     }
 
-    public UserDetails(String firstName, String lastName, Gender gender, LocalDate dateOfBirth, String address, User user) {
+    public UserDetails(
+            User user,
+            String firstName,
+            String lastName,
+            Gender gender,
+            LocalDate dateOfBirth,
+            String address) {
+        this.user = user;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
+
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
         this.user = user;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = user.getId();
     }
 
     public String getFirstName() {
@@ -85,11 +111,4 @@ public class UserDetails implements Serializable {
         this.address = address;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

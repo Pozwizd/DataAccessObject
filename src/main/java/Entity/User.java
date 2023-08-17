@@ -1,10 +1,11 @@
 package Entity;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import java.util.List;
 
 @Entity
-@Table(name = "users", schema = "shop")
+@Table(name = "users", schema = "shop2")
 public class User {
 
     @Id
@@ -24,7 +25,7 @@ public class User {
     @Column
     private String phone_number;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserDetails userDetails;
 
     @OneToMany(mappedBy = "user")
@@ -93,6 +94,7 @@ public class User {
     }
 
     public void setUserDetails(UserDetails userDetails) {
+        userDetails.setUser(this);
         this.userDetails = userDetails;
     }
 
