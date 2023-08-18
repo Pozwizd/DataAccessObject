@@ -1,6 +1,7 @@
 package Entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "product")
@@ -8,7 +9,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name = "product_name")
     private String productName;
@@ -22,8 +23,13 @@ public class Product {
     @Column
     private int quantity;
 
-    @OneToMany(mappedBy="product")
-    private List<ShoppingCart> shoppingCarts;
+    @ManyToMany
+    @JoinTable(
+            name = "shopping_cart",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users = new ArrayList<>();
 
     public Product() {
     }
@@ -43,11 +49,19 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public int getId() {
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -83,11 +97,4 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public List<ShoppingCart> getShoppingCarts() {
-        return shoppingCarts;
-    }
-
-    public void setShoppingCarts(List<ShoppingCart> shoppingCarts) {
-        this.shoppingCarts = shoppingCarts;
-    }
 }

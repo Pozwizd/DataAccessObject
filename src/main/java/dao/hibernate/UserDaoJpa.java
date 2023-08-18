@@ -17,7 +17,13 @@ public class UserDaoJpa implements UserDao {
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            em.persist(user);
+            User userMerge = em.merge(new User(
+                    user.getUsername(),
+                    user.getPassword(),
+                    user.getEmail(),
+                    user.getPhone_number()
+            ));
+            em.persist(userMerge);
             em.getTransaction().commit();
 
         } catch (Exception e) {

@@ -27,8 +27,7 @@ public class OrderHibernateTest {
 
     OrderOrmDao orderOrmDao = new OrderOrmDao();
 
-    private final User user = new User(1,
-            "user1",
+    private final User user = new User("user1",
             "userPassword1",
             "user1@example.com",
             "123456");
@@ -51,87 +50,18 @@ public class OrderHibernateTest {
             699.99,
             12);
 
-    private final ShoppingCart shoppingCart = new ShoppingCart(user,product,4);
-    private final ShoppingCart shoppingCart2 = new ShoppingCart(user,product2,1);
-
-    private final ShoppingCart shoppingCartUser2 = new ShoppingCart(user2,product,4);
-    private final ShoppingCart shoppingCartUser2_2 = new ShoppingCart(user2,product2,1);
-
-    Order order = new Order(1,
-            user,
+    private final Order order = new Order(user,
             "AMD Ryzen 9 5950X * 1, Intel Core i9-11900K * 1",
             4695.00);
 
-    Order order2 = new Order(2,
-            user2,
+    private final Order order2 = new Order(user,
             "AMD Ryzen 5 5950X * 5, Intel Core i9-11900K * 2",
             5000);
 
-    Order order3 = new Order(3,
-            user,
+    private final Order order3 = new Order(user,
             "AMD Ryzen 7 5950X * 4, Intel Core i9-11900K * 1",
             6000);
 
-
-
-    @BeforeEach
-    public void createObjectsForTesting() {
-
-        EntityManager em = null;
-        try {
-            em = EntityManagerUtil.getEntityManager();
-            em.getTransaction().begin();
-            em.merge(user);
-            em.merge(user2);
-            em.persist(user);
-            em.persist(user2);
-            em.getTransaction().commit();
-            logger.info("User created for testing");
-        } catch (Exception e) {
-            logger.info("Error creating user for testing");
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-
-        try {
-            em = EntityManagerUtil.getEntityManager();
-            em.getTransaction().begin();
-            em.merge(product);
-            em.merge(product2);
-            em.persist(product);
-            em.persist(product2);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            logger.info("Error creating product for testing");
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-
-        try {
-            em = EntityManagerUtil.getEntityManager();
-            em.getTransaction().begin();
-            em.merge(shoppingCart);
-            em.merge(shoppingCart2);
-            em.persist(shoppingCart);
-            em.persist(shoppingCart2);
-            em.persist(shoppingCartUser2);
-            em.persist(shoppingCartUser2_2);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em != null) {
-                em.getTransaction().rollback();
-            }
-            logger.info("Error creating shopping cart for testing");
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
 
     @AfterEach
     public void deleteObjectsForTesting() {
@@ -175,13 +105,18 @@ public class OrderHibernateTest {
 
     @Test
     public void createOrderTest() {
-        orderOrmDao.createOrder(order);
+
 
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
-            Order orderFromDb = em.find(Order.class, 1);
-            assertEquals(orderFromDb.getId(), order.getId());
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+            em.close();
+            orderOrmDao.createOrder(order);
+            em = EntityManagerUtil.getEntityManager();
+            Order orderFromDb = em.find(Order.class, 1L);
             assertEquals(orderFromDb.getUser().getId(), order.getUser().getId());
             assertEquals(orderFromDb.getOrderList(), order.getOrderList());
             assertEquals(orderFromDb.getTotalPrice(), order.getTotalPrice());
@@ -201,7 +136,7 @@ public class OrderHibernateTest {
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            em.merge(order);
+            em.persist(user);
             em.persist(order);
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -211,7 +146,7 @@ public class OrderHibernateTest {
                 em.close();
             }
         }
-        List<Order> orders = orderOrmDao.getUserOrders(1);
+        List<Order> orders = orderOrmDao.getUserOrders(1L);
         assertEquals(orders.size(), 1);
         assertEquals(orders.get(0).getId(), order.getId());
         assertEquals(orders.get(0).getUser().getId(), order.getUser().getId());
@@ -226,9 +161,7 @@ public class OrderHibernateTest {
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            em.merge(order);
-            em.merge(order2);
-            em.merge(order3);
+            em.persist(user);
             em.persist(order);
             em.persist(order2);
             em.persist(order3);

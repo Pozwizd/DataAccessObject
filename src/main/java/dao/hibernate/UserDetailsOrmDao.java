@@ -35,27 +35,37 @@ public class UserDetailsOrmDao {
 
     public void updateUserDetails(UserDetails details) {
 
+
         EntityManager em = EntityManagerUtil.getEntityManager();
+
         try {
+
             em.getTransaction().begin();
+
+            // Получаем сущность по id
             UserDetails attachedDetails = em.find(UserDetails.class, details.getUser().getId());
+
+            // Копируем изменения из переданного объекта
             attachedDetails.setFirstName(details.getFirstName());
             attachedDetails.setLastName(details.getLastName());
             attachedDetails.setGender(details.getGender());
             attachedDetails.setDateOfBirth(details.getDateOfBirth());
             attachedDetails.setAddress(details.getAddress());
-            attachedDetails.setUser(details.getUser());
-            em.merge(details);
+
+            // Сохраняем изменения
+            em.merge(attachedDetails);
+
             em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em != null) {
-                em.getTransaction().rollback();
-            }
-            logger.error(e);
+
+        } catch (Exception ex) {
+
+            em.getTransaction().rollback();
+            throw ex;
+
         } finally {
-            if (em != null) {
-                em.close();
-            }
+
+            em.close();
+
         }
     }
 

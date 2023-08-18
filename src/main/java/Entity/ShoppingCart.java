@@ -5,10 +5,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @Entity(name = "shopping_cart")
-public class ShoppingCart implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class ShoppingCart {
 
     @Id
     @ManyToOne

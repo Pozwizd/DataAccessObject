@@ -1,6 +1,7 @@
 package dao.hibernate;
 
 import Entity.Gender;
+import Entity.Order;
 import Entity.User;
 import Entity.UserDetails;
 import org.junit.jupiter.api.Test;
@@ -28,12 +29,16 @@ public class TestTry {
                 "Київ, вул. Шевченка 10"
                 );
 
+        Order order = new Order(user,
+                "AMD Ryzen 9 5950X * 1, Intel Core i9-11900K * 1",
+                4695.00);
+
 
         entityManager.persist(user);
-        entityManager.persist(userDetails);
+        entityManager.persist(order);
 
         entityManager.getTransaction().commit();
-        System.out.println(entityManager.find(UserDetails.class, 1L));
+        System.out.println(entityManager.find(Order.class, 1L));
         entityManager.close();
 
     }

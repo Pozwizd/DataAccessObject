@@ -15,7 +15,12 @@ public class OrderOrmDao implements OrderDao{
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            em.persist(order);
+            Order orderMerge = new Order(
+                    order.getUser(),
+                    order.getOrderList(),
+                    order.getTotalPrice()
+            );
+            em.persist(orderMerge);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em != null) {

@@ -2,6 +2,7 @@ package Entity;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,8 +29,13 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserDetails userDetails;
 
+    @ManyToMany(mappedBy = "users", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Product> products = new ArrayList<>();
+
+
+
     @OneToMany(mappedBy = "user")
-    private List<ShoppingCart> shoppingCarts;
+    private List<Order> orders = new ArrayList<>();
 
     public User() {
     }
@@ -47,6 +53,19 @@ public class User {
         this.password = password;
         this.email = email;
         this.phone_number = phone_number;
+    }
+
+    public void addPoduct(Product product){
+        product.getUsers().add(this);
+        products.add(product);
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public long getId() {
@@ -98,11 +117,11 @@ public class User {
         this.userDetails = userDetails;
     }
 
-    public List<ShoppingCart> getShoppingCarts() {
-        return shoppingCarts;
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    public void setShoppingCarts(List<ShoppingCart> shoppingCarts) {
-        this.shoppingCarts = shoppingCarts;
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

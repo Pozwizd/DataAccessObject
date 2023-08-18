@@ -3,13 +3,13 @@ package Entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", schema = "shop2")
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private int id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -31,11 +31,17 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public int getId() {
+    public Order(User user, String orderList, double totalPrice) {
+        this.user = user;
+        this.orderList = orderList;
+        this.totalPrice = totalPrice;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

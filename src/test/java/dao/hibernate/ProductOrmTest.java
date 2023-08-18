@@ -63,7 +63,7 @@ public class ProductOrmTest {
 
         try {
             em = EntityManagerUtil.getEntityManager();
-            Product expectedProduct = em.find(Product.class, 1);
+            Product expectedProduct = em.find(Product.class, 1L);
             assertNotNull(expectedProduct);
             assertEquals(product.getProductName(), expectedProduct.getProductName());
             assertEquals(product.getDescription(), expectedProduct.getDescription());
@@ -98,18 +98,16 @@ public class ProductOrmTest {
             em.persist(product2);
             em.getTransaction().commit();
             List<Product> products = productOrmDao.getAllProducts();
-            for (Product product : products) {
-                assertNotNull(product);
-                assertEquals(product.getProductName(), product1.getProductName());
-                assertEquals(product.getDescription(), product1.getDescription());
-                assertEquals(product.getPrice(), product1.getPrice());
-                assertEquals(product.getQuantity(), product1.getQuantity());
-                assertEquals(product.getProductName(), product2.getProductName());
-                assertEquals(product.getDescription(), product2.getDescription());
-                assertEquals(product.getPrice(), product2.getPrice());
-                assertEquals(product.getQuantity(), product2.getQuantity());
-                logger.info("Product successfully retrieved");
-            }
+
+                assertNotNull(products);
+                assertEquals(products.get(0).getProductName(), product1.getProductName());
+                assertEquals(products.get(0).getDescription(), product1.getDescription());
+                assertEquals(products.get(0).getPrice(), product1.getPrice());
+                assertEquals(products.get(0).getQuantity(), product1.getQuantity());
+                assertEquals(products.get(1).getProductName(), product2.getProductName());
+                assertEquals(products.get(1).getDescription(), product2.getDescription());
+                assertEquals(products.get(1).getPrice(), product2.getPrice());
+                assertEquals(products.get(1).getQuantity(), product2.getQuantity());
             logger.info("All products successfully retrieved");
         } catch (HibernateException e) {
             logger.error("Error retrieving all products", e);
@@ -139,7 +137,8 @@ public class ProductOrmTest {
             em.persist(product1);
             em.persist(product2);
             em.getTransaction().commit();
-            Product expectedProduct = productOrmDao.getProductById(1);
+            em.close();
+            Product expectedProduct = productOrmDao.getProductById(1L);
             assertNotNull(expectedProduct);
             assertEquals(expectedProduct.getProductName(), product1.getProductName());
             assertEquals(expectedProduct.getDescription(), product1.getDescription());
@@ -179,7 +178,7 @@ public class ProductOrmTest {
             productOrmDao.updateProduct(product2);
 
             em = EntityManagerUtil.getEntityManager();
-            Product expectedProduct = em.find(Product.class, 1);
+            Product expectedProduct = em.find(Product.class, 1L);
             assertNotNull(expectedProduct);
             assertEquals(expectedProduct.getProductName(), product2.getProductName());
             assertEquals(expectedProduct.getDescription(), product2.getDescription());
@@ -209,7 +208,7 @@ public class ProductOrmTest {
             em.persist(product1);
             em.getTransaction().commit();
             productOrmDao.deleteProduct(1);
-            Product expectedProduct = em.find(Product.class, 1);
+            Product expectedProduct = em.find(Product.class, 1L);
             assertNotNull(expectedProduct);
             logger.info("Product successfully deleted");
         } catch (HibernateException e) {
