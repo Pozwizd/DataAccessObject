@@ -1,6 +1,7 @@
 package Entity;
 
 import javax.persistence.*;
+import javax.persistence.GenerationType;
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -8,13 +9,18 @@ import java.io.Serializable;
 public class ShoppingCart {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+
+
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Id
+
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @Column
@@ -29,12 +35,28 @@ public class ShoppingCart {
         this.quantity = quantity;
     }
 
+    public ShoppingCart(long id, User user, Product product, int quantity) {
+        this.id = id;
+        this.user = user;
+        this.product = product;
+        this.quantity = quantity;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+        this.user.getShoppingCarts().add(this);
     }
 
     public Product getProduct() {
@@ -43,6 +65,7 @@ public class ShoppingCart {
 
     public void setProduct(Product product) {
         this.product = product;
+        this.product.getShoppingCarts().add(this);
     }
 
     public int getQuantity() {

@@ -1,14 +1,11 @@
 package dao.hibernate;
 
-import Entity.Gender;
-import Entity.Order;
-import Entity.User;
-import Entity.UserDetails;
+import Entity.*;
 import org.junit.jupiter.api.Test;
 import utils.EntityManagerUtil;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
+
 
 public class TestTry {
 
@@ -17,28 +14,40 @@ public class TestTry {
         EntityManager entityManager = EntityManagerUtil.getEntityManager();
         entityManager.getTransaction().begin();
 
-        User user = new User("user1",
+        User user = new User(
+                "user1",
                 "userPassword1",
                 "user1@example.com",
                 "123456");
 
-        UserDetails userDetails = new UserDetails(user,"Іван",
-                "Петренко",
-                Gender.MALE,
-                LocalDate.of(1980, 1, 1),
-                "Київ, вул. Шевченка 10"
-                );
 
-        Order order = new Order(user,
-                "AMD Ryzen 9 5950X * 1, Intel Core i9-11900K * 1",
-                4695.00);
+        Product product = new Product(
+                "AMD Ryzen 9 5950X",
+                "16-Core 3.4 GHz CPU",
+                999.99,
+                10);
+
+        Product product2 = new Product(
+                "Intel Core i9-11900K",
+                "8-Core 3.5 GHz CPU",
+                699.99,
+                12);
+
 
 
         entityManager.persist(user);
-        entityManager.persist(order);
+        entityManager.persist(product);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        entityManager = EntityManagerUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+        ShoppingCart shoppingCart = new ShoppingCart(user,product,4);
+
+        ShoppingCart shoppingCartMerge = entityManager.merge(shoppingCart);
+        entityManager.persist(shoppingCartMerge);
 
         entityManager.getTransaction().commit();
-        System.out.println(entityManager.find(Order.class, 1L));
+        System.out.println(entityManager.find(ShoppingCart.class, 1L));
         entityManager.close();
 
     }

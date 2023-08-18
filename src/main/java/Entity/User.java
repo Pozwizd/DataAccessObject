@@ -3,7 +3,9 @@ package Entity;
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", schema = "shop2")
@@ -29,12 +31,10 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserDetails userDetails;
 
-    @ManyToMany(mappedBy = "users", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ShoppingCart> shoppingCarts = new ArrayList<>();
 
-
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
     public User() {
@@ -55,17 +55,12 @@ public class User {
         this.phone_number = phone_number;
     }
 
-    public void addPoduct(Product product){
-        product.getUsers().add(this);
-        products.add(product);
+    public List<ShoppingCart> getShoppingCarts() {
+        return shoppingCarts;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setShoppingCarts(List<ShoppingCart> shoppingCarts) {
+        this.shoppingCarts = shoppingCarts;
     }
 
     public long getId() {
