@@ -1,7 +1,13 @@
 package org.example;
 
 import Entity.Order;
+import Entity.Product;
+import Entity.ShoppingCart;
 import Entity.User;
+import dao.hibernate.ShoppingCartOrmDao;
+import dao.jdbc.ShoppingCartJdbcDao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import utils.EntityManagerUtil;
 
@@ -12,9 +18,15 @@ import java.util.List;
 
 public class OrderServiceOrm {
 
+    private static final Logger logger = LogManager.getLogger(OrderServiceOrm.class);
+
     private SessionFactory sessionFactory;
 
-    public Order createOrder(int userId) {
+    private ShoppingCartOrmDao shoppingCartOrmDao;
+
+    public Order createOrder(long userId) {
+
+
 
         EntityManager em = null;
 
@@ -25,48 +37,54 @@ public class OrderServiceOrm {
             User user = em.find(User.class, userId);
 
             // Получить товары и кол-во из корзины
-            Query query = em.createQuery("SELECT p.productName, sc.quantity" +
-                    " FROM shopping_cart sc JOIN product p WHERE sc.user.id = :userId");
-            query.setParameter("userId", userId);
 
             List<String> productNames = new ArrayList<>();
             List<Integer> quantities = new ArrayList<>();
-
-            for(Object[] row : (List<Object[]>)query.getResultList()) {
-                productNames.add((String)row[0]);
-                quantities.add((Integer)row[1]);
+            for (int i = 0; i < user.getShoppingCarts().size(); i++) {
+                productNames.add(em.find(Product.class, user.getShoppingCarts().get(i).getProduct().getId()).getProductName());
+                quantities.add(user.getShoppingCarts().get(i).getQuantity());
             }
-
+            em.close();
             // Сформировать список товаров
             String productList = getProductNames(productNames, quantities);
-            em.close();
-            em = EntityManagerUtil.getEntityManager();
+
             // Рассчитать стоимость
-            Query priceQuery = em.createQuery("SELECT SUM(p.price * s.quantity) FROM product p JOIN p.shoppingCarts s WHERE s.user.id = :userId");
-            priceQuery.setParameter("userId", userId);
-            double totalPrice = priceQuery.getFirstResult();
-
-            // Создать и сохранить заказ
-            em.close();
             em = EntityManagerUtil.getEntityManager();
+            double totalPrice = 0;
+            for (int i = 0; i < user.getShoppingCarts().size(); i++) {
+                totalPrice += user.getShoppingCarts().get(i).getProduct().getPrice()
+                        * user.getShoppingCarts().get(i).getQuantity();
+            }
+            
+            em.close();
+            // Создать и сохранить заказ
 
+            em = EntityManagerUtil.getEntityManager();
             Order order = new Order();
             order.setUser(user);
             order.setOrderList(productList);
             order.setTotalPrice(totalPrice);
 
             // Очистить корзину
-            Query deleteQuery = em.createQuery("DELETE FROM shopping_cart sc WHERE sc.user.id = :userId");
-            deleteQuery.setParameter("userId", userId);
-            deleteQuery.executeUpdate();
+
+            em = EntityManagerUtil.getEntityManager();
+
+            em.getTransaction().begin();
+            User user1 = em.find(User.class, userId);
+
+            for (ShoppingCart cart : user1.getShoppingCarts()) {
+                em.remove(cart);
+            }
+            user.getShoppingCarts().clear();
             em.getTransaction().commit();
+
             return order;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while creating order", e);
             return null;
         } finally {
             if(em != null)
-                em.close(); // (5)
+                em.close();
         }
     }
     private String getProductNames(List<String> products, List<Integer> quantity) {

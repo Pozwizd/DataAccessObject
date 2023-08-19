@@ -199,7 +199,7 @@ class ShoppingCartOrmDaoTest {
             shoppingCartOrmDao.clearUserCart(2L);
             em = EntityManagerUtil.getEntityManager();
             List<ShoppingCart> shoppingCartList = em.find(User.class, 2L).getShoppingCarts();
-            assertEquals(shoppingCartList.size(), 0);
+            assertEquals(0, shoppingCartList.size());
             logger.info("User cart products are successfully cleared");
         } catch (Exception e) {
             logger.info("Error testing getUserCartProducts method");
@@ -209,36 +209,42 @@ class ShoppingCartOrmDaoTest {
             }
         }
     }
-//
-//    @Test
-//    void removeProductFromCart() {
-//        ShoppingCart shoppingCart = new ShoppingCart(user,product,4);
-//        ShoppingCart shoppingCart2 = new ShoppingCart(user,product2,1);
-//
-//        ShoppingCart shoppingCartUser2 = new ShoppingCart(user2,product,4);
-//        ShoppingCart shoppingCartUser2_2 = new ShoppingCart(user2,product2,1);
-//        EntityManager em = null;
-//        try {
-//            em = EntityManagerUtil.getEntityManager();
-//            em.getTransaction().begin();
-//            em.persist(shoppingCart);
-//            em.persist(shoppingCart2);
-//            em.getTransaction().commit();
-//            em.close();
-//            shoppingCartOrmDao.removeProductFromCart(shoppingCart);
-//            em = EntityManagerUtil.getEntityManager();
-//            ShoppingCart actualShoppingCart = em.find(ShoppingCart.class, user);
-//            assertEquals(actualShoppingCart.getUser().getId(), shoppingCart2.getUser().getId());
-//            assertEquals(actualShoppingCart.getProduct().getId(), shoppingCart2.getProduct().getId());
-//            assertEquals(actualShoppingCart.getQuantity(), shoppingCart2.getQuantity());
-//            logger.info("Product is successfully removed from the user cart");
-//        } catch (Exception e) {
-//            logger.info("Error testing getUserCartProducts method");
-//        } finally {
-//            if (em != null) {
-//                em.close();
-//            }
-//        }
-//    }
+
+    @Test
+    void removeProductFromCart() {
+        EntityManager em = null;
+        try {
+            em = EntityManagerUtil.getEntityManager();
+            em.getTransaction().begin();
+
+            User user1 = em.find(User.class, 1L);
+
+            Product product1 = em.find(Product.class, 1L);
+            Product product2 = em.find(Product.class, 2L);
+
+            ShoppingCart shoppingCart = new ShoppingCart(user1,product1,2);
+            ShoppingCart shoppingCart2 = new ShoppingCart(user1,product2,3);
+
+            em.persist(shoppingCart);
+            em.persist(shoppingCart2);
+            em.getTransaction().commit();
+            em.close();
+
+            shoppingCartOrmDao.removeProductFromCart(shoppingCart);
+
+            em = EntityManagerUtil.getEntityManager();
+            List<ShoppingCart> actualShoppingCart = em.find(User.class, 1L).getShoppingCarts();
+            assertEquals(actualShoppingCart.get(0).getUser().getId(), shoppingCart2.getUser().getId());
+            assertEquals(actualShoppingCart.get(0).getProduct().getId(), shoppingCart2.getProduct().getId());
+            assertEquals(actualShoppingCart.get(0).getQuantity(), shoppingCart2.getQuantity());
+            logger.info("Product is successfully removed from the user cart");
+        } catch (Exception e) {
+            logger.info("Error testing getUserCartProducts method");
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }
 

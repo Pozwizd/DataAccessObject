@@ -7,7 +7,6 @@ import Entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.OrderServiceOrm;
-import org.example.OrderServiceOrm3;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,57 +61,30 @@ class OrderServiceOrmTest {
 
 
     @BeforeEach
-    public void createObjectsForTesting() {
-
+    public void createObjectsForTesting(){
 
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            em.persist(user);
-            em.persist(user2);
+
+            em.persist(em.merge(user));
+            em.persist(em.merge(user2));
+            em.persist(em.merge(product));
+            em.persist(em.merge(product2));
+            em.persist(em.merge(shoppingCart));
+            em.persist(em.merge(shoppingCart2));
+            em.persist(em.merge(shoppingCartUser2));
+            em.persist(em.merge(shoppingCartUser2_2));
             em.getTransaction().commit();
-            em.close();
+            logger.info("Creating the User and the product for testing");
         } catch (Exception e) {
-            logger.error(e);
+            logger.info("Error creating user and product for testing");
         } finally {
             if (em != null) {
                 em.close();
             }
         }
-
-        try {
-            em = EntityManagerUtil.getEntityManager();
-            em.getTransaction().begin();
-            em.persist(product);
-            em.persist(product2);
-            em.getTransaction().commit();
-            em.close();
-        } catch (Exception e) {
-            logger.error(e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-
-        try {
-            em = EntityManagerUtil.getEntityManager();
-            em.getTransaction().begin();
-            em.persist(shoppingCart);
-            em.persist(shoppingCart2);
-            em.persist(shoppingCartUser2);
-            em.persist(shoppingCartUser2_2);
-            em.getTransaction().commit();
-            em.close();
-        } catch (Exception e) {
-            logger.error(e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-
     }
 
     @AfterEach
@@ -151,18 +123,19 @@ class OrderServiceOrmTest {
 
     @Test
     public void makeOrderTest() {
-        Order order = orderServiceOrm.createOrder(1);
-        ;
+        Order order = orderServiceOrm.createOrder(1L);
+
         orderOrmDao.createOrder(order);
 
         EntityManager em = null;
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            Order orderFromDB = em.find(Order.class, order.getId());
+            Order orderFromDB = em.find(Order.class, 1L);
+            assertEquals(order.getOrderList(), orderFromDB.getOrderList());
             em.getTransaction().commit();
             em.close();
-
+            logger.info("Testing the makeOrder method");
         } catch (Exception e) {
             logger.error(e);
         } finally {
