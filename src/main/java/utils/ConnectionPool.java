@@ -15,8 +15,8 @@ public class ConnectionPool {
         dataSource.setUrl("jdbc:mysql://localhost:3306/shop2");
         dataSource.setUsername("root");
         dataSource.setPassword("0000");
-        dataSource.setMinIdle(5);
-        dataSource.setMaxIdle(10);
+        dataSource.setMinIdle(15);
+        dataSource.setMaxIdle(25);
         dataSource.setMaxOpenPreparedStatements(100);
     }
 

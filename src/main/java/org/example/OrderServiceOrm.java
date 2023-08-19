@@ -68,6 +68,7 @@ public class OrderServiceOrm {
                 em.remove(cart);
             }
             user.getShoppingCarts().clear();
+            em.merge(user);
             em.getTransaction().commit();
 
             return order;
