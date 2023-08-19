@@ -4,7 +4,6 @@ import Entity.Product;
 import utils.EntityManagerUtil;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 public class ProductOrmDao implements ProductDao {
 

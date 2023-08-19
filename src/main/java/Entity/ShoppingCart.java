@@ -1,9 +1,6 @@
 package Entity;
 
 import javax.persistence.*;
-import javax.persistence.GenerationType;
-import java.io.Serial;
-import java.io.Serializable;
 
 @Entity(name = "shopping_cart")
 public class ShoppingCart {

@@ -1,13 +1,13 @@
 package org.example;
 
-import models.Order;
-import models.Product;
-import models.ShoppingCart;
-import models.User;
 import dao.jdbc.OrderJdbcDao;
 import dao.jdbc.ProductJdbcDao;
 import dao.jdbc.ShoppingCartJdbcDao;
 import dao.jdbc.UserDaoJdbc;
+import models.Order;
+import models.Product;
+import models.ShoppingCart;
+import models.User;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.

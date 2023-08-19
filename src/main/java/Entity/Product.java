@@ -1,7 +1,8 @@
 package Entity;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "product")
 public class Product {

@@ -1,11 +1,7 @@
 package Entity;
 
 import javax.persistence.*;
-import javax.persistence.GenerationType;
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity(name = "user_details")
 public class UserDetails{

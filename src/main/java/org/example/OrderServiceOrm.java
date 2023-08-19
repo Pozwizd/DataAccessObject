@@ -5,14 +5,12 @@ import Entity.Product;
 import Entity.ShoppingCart;
 import Entity.User;
 import dao.hibernate.ShoppingCartOrmDao;
-import dao.jdbc.ShoppingCartJdbcDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import utils.EntityManagerUtil;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
