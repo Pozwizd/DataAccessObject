@@ -43,7 +43,7 @@ public class UserDetailsOrmTest {
             stmt.close();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("Error in deleteAfterTest", e);
         }
     }
 
@@ -133,7 +133,7 @@ public class UserDetailsOrmTest {
             Assertions.assertEquals(userDetails.getUser().getId(), userDetailsFromDB.getUser().getId());
             logger.info("UserDetails retrieved by id successfully");
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("UserDetails error retrieved by id", e);
         } finally {
             if (em != null) {
                 em.close();
@@ -187,7 +187,10 @@ public class UserDetailsOrmTest {
             Assertions.assertEquals(updateUserDetails.getUser().getId(), userDetails1.getUser().getId());
             logger.info("UserDetails updated successfully");
         } catch (Exception e) {
-            logger.error(e);
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+            logger.error("UserDetails error updated", e);
         } finally {
             if (em != null) {
                 em.close();

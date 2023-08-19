@@ -97,7 +97,6 @@ public class OrderHibernateTest {
             stmt = connection.prepareStatement("ALTER TABLE orders AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
-            logger.info("Deleting the User and the product after a test");
         } catch (SQLException e) {
             logger.info("Error deleting user and product after testing");
         }

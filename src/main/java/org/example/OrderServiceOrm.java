@@ -26,17 +26,13 @@ public class OrderServiceOrm {
 
     public Order createOrder(long userId) {
 
-
-
         EntityManager em = null;
 
         try {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
-            // Получить пользователя
             User user = em.find(User.class, userId);
 
-            // Получить товары и кол-во из корзины
 
             List<String> productNames = new ArrayList<>();
             List<Integer> quantities = new ArrayList<>();
@@ -45,10 +41,9 @@ public class OrderServiceOrm {
                 quantities.add(user.getShoppingCarts().get(i).getQuantity());
             }
             em.close();
-            // Сформировать список товаров
+
             String productList = getProductNames(productNames, quantities);
 
-            // Рассчитать стоимость
             em = EntityManagerUtil.getEntityManager();
             double totalPrice = 0;
             for (int i = 0; i < user.getShoppingCarts().size(); i++) {
@@ -57,15 +52,12 @@ public class OrderServiceOrm {
             }
             
             em.close();
-            // Создать и сохранить заказ
 
             em = EntityManagerUtil.getEntityManager();
             Order order = new Order();
             order.setUser(user);
             order.setOrderList(productList);
             order.setTotalPrice(totalPrice);
-
-            // Очистить корзину
 
             em = EntityManagerUtil.getEntityManager();
 
@@ -81,6 +73,9 @@ public class OrderServiceOrm {
             return order;
         } catch (Exception e) {
             logger.error("Error while creating order", e);
+            if(em != null) {
+                em.getTransaction().rollback();
+            }
             return null;
         } finally {
             if(em != null)

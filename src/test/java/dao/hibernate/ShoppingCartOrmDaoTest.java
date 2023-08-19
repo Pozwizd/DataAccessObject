@@ -64,7 +64,6 @@ class ShoppingCartOrmDaoTest {
             em.persist(em.merge(product));
             em.persist(em.merge(product2));
             em.getTransaction().commit();
-            logger.info("Creating the User and the product for testing");
         } catch (Exception e) {
             logger.info("Error creating user and product for testing");
         } finally {
@@ -103,10 +102,8 @@ class ShoppingCartOrmDaoTest {
             stmt = connection.prepareStatement("ALTER TABLE product AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
-            logger.info("Deleting the User and the product after a test");
         } catch (SQLException e) {
             logger.info("Error deleting user and product after testing");
-
         }
 
     }

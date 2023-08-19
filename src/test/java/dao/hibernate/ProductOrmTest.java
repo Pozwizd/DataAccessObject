@@ -44,9 +44,8 @@ public class ProductOrmTest {
             stmt = connection.prepareStatement("ALTER TABLE orders AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error deleting product after test", e);
         }
     }
 

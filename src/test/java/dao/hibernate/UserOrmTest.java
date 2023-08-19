@@ -33,9 +33,8 @@ public class UserOrmTest {
             stmt = connection.prepareStatement("ALTER TABLE users AUTO_INCREMENT = 1;");
             stmt.executeUpdate();
             stmt.close();
-            logger.info("Clear table after test");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("Error in deleteAfterTest", e);
         }
     }
 
@@ -55,14 +54,17 @@ public class UserOrmTest {
         try {
             em = EntityManagerUtil.getEntityManager();
             User savedUser = em.find(User.class, user.getId());
-            logger.info(savedUser.getUsername());
             assertEquals(user.getId(), savedUser.getId());
             assertEquals(user.getUsername(), savedUser.getUsername());
             assertEquals(user.getPassword(), savedUser.getPassword());
             assertEquals(user.getEmail(), savedUser.getEmail());
             assertEquals(user.getPhone_number(), savedUser.getPhone_number());
             logger.info("User successfully created");
-
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+            logger.error("Error during creating user", e);
         } finally {
             if(em != null) {
                 em.close();
@@ -92,10 +94,14 @@ public class UserOrmTest {
             assertEquals(user.getPhone_number(), foundUser.getPhone_number());
             logger.info("User successfully retrieved by id");
         } catch (Exception ex) {
-            em.getTransaction().rollback();
-            throw ex;
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+            logger.error("Error during retrieving user by id", ex);
         } finally {
-            em.close();
+            if (em != null) {
+                em.close();
+            }
         }
     }
 
@@ -128,9 +134,11 @@ public class UserOrmTest {
             assertEquals(mergedUser.getEmail(), updateUser.getEmail());
             assertEquals(mergedUser.getPhone_number(), updateUser.getPhone_number());
             logger.info("User successfully updated");
-        } catch (Exception ex) {
-            em.getTransaction().rollback();
-            throw ex;
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+            logger.error("Error during updating user", e);
         } finally {
             em.close();
         }
@@ -171,6 +179,11 @@ public class UserOrmTest {
             User actualUser = em.find(User.class, 1L);
             assertNull(actualUser);
             logger.info("User deleted successfully");
+        } catch (Exception e) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+            logger.error("Error during deleting user", e);
         } finally {
             if(em != null) {
                 em.close();

@@ -79,7 +79,7 @@ class OrderServiceOrmTest {
             em.getTransaction().commit();
             logger.info("Creating the User and the product for testing");
         } catch (Exception e) {
-            logger.info("Error creating user and product for testing");
+            logger.error("Error creating user and product for testing", e);
         } finally {
             if (em != null) {
                 em.close();
@@ -116,8 +116,7 @@ class OrderServiceOrmTest {
 
             logger.info("Deleting the User and the product after a test");
         } catch (SQLException e) {
-            logger.info("Error deleting user and product after testing");
-
+            logger.error("Error deleting user and product after testing", e);
         }
     }
 
@@ -135,7 +134,7 @@ class OrderServiceOrmTest {
             assertEquals(order.getOrderList(), orderFromDB.getOrderList());
             em.getTransaction().commit();
             em.close();
-            logger.info("Testing the makeOrder method");
+            logger.info("orderServiceOrm successfully tested");
         } catch (Exception e) {
             logger.error(e);
         } finally {
