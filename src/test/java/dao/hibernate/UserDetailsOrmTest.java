@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import utils.ConnectionPool;
+import utils.ConnectionPoolForOrm;
 import utils.EntityManagerUtil;
 
 import javax.persistence.EntityManager;
@@ -24,7 +25,7 @@ public class UserDetailsOrmTest {
 
     @AfterEach
     public void deleteAfterTest() {
-        try (Connection connection = ConnectionPool.getConnection()) {
+        try (Connection connection = ConnectionPoolForOrm.getConnection()) {
 
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM users");
             stmt.executeUpdate();

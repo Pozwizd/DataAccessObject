@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.ConnectionPool;
+import utils.ConnectionPoolForOrm;
 import utils.EntityManagerUtil;
 
 import javax.persistence.EntityManager;
@@ -77,7 +78,7 @@ class ShoppingCartOrmDaoTest {
     @AfterEach
     public void deleteObjectsForTesting(){
 
-        try(Connection connection = ConnectionPool.getConnection()) {
+        try(Connection connection = ConnectionPoolForOrm.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM users");
             stmt.executeUpdate();
             stmt.close();

@@ -6,13 +6,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 
-public class ConnectionPool {
+public class ConnectionPoolForOrm {
 
     private static final BasicDataSource dataSource;
 
     static {
         dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/shop");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/shop2");
         dataSource.setUsername("root");
         dataSource.setPassword("0000");
         dataSource.setMinIdle(15);

@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import utils.ConnectionPool;
+import utils.ConnectionPoolForOrm;
 import utils.EntityManagerUtil;
 
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ public class ProductOrmTest {
 
     @AfterEach
     public void deleteProductAfterTest(){
-        try(Connection connection = ConnectionPool.getConnection()) {
+        try(Connection connection = ConnectionPoolForOrm.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM product");
             stmt.executeUpdate();
             stmt.close();
