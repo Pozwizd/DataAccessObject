@@ -30,36 +30,25 @@ public class OrderServiceOrm {
             em = EntityManagerUtil.getEntityManager();
             em.getTransaction().begin();
             User user = em.find(User.class, userId);
-
-
             List<String> productNames = new ArrayList<>();
             List<Integer> quantities = new ArrayList<>();
             for (int i = 0; i < user.getShoppingCarts().size(); i++) {
                 productNames.add(em.find(Product.class, user.getShoppingCarts().get(i).getProduct().getId()).getProductName());
                 quantities.add(user.getShoppingCarts().get(i).getQuantity());
             }
-            em.close();
 
             String productList = getProductNames(productNames, quantities);
 
-            em = EntityManagerUtil.getEntityManager();
             double totalPrice = 0;
             for (int i = 0; i < user.getShoppingCarts().size(); i++) {
                 totalPrice += user.getShoppingCarts().get(i).getProduct().getPrice()
                         * user.getShoppingCarts().get(i).getQuantity();
             }
-            
-            em.close();
-
-            em = EntityManagerUtil.getEntityManager();
             Order order = new Order();
             order.setUser(user);
             order.setOrderList(productList);
             order.setTotalPrice(totalPrice);
 
-            em = EntityManagerUtil.getEntityManager();
-
-            em.getTransaction().begin();
             User user1 = em.find(User.class, userId);
 
             for (ShoppingCart cart : user1.getShoppingCarts()) {
@@ -68,6 +57,7 @@ public class OrderServiceOrm {
             user.getShoppingCarts().clear();
             em.merge(user);
             em.getTransaction().commit();
+            em.close();
 
             return order;
         } catch (Exception e) {

@@ -103,6 +103,10 @@ class OrderServiceOrmTest {
             stmt.executeUpdate();
             stmt.close();
 
+            stmt = connection.prepareStatement("DELETE FROM orders");
+            stmt.executeUpdate();
+            stmt.close();
+
             stmt = connection.prepareStatement("ALTER TABLE users AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
@@ -112,6 +116,10 @@ class OrderServiceOrmTest {
             stmt.close();
 
             stmt = connection.prepareStatement("ALTER TABLE shopping_cart AUTO_INCREMENT = 1");
+            stmt.executeUpdate();
+            stmt.close();
+
+            stmt = connection.prepareStatement("ALTER TABLE orders AUTO_INCREMENT = 1");
             stmt.executeUpdate();
             stmt.close();
 

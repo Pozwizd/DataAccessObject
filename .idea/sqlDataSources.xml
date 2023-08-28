@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DdlMappings">
-    <mapping uuid="a5c370b9-fece-4cb0-829c-705f3a5a2c1a" name="hibernate.cfg.xml">
-      <data-sources db="d460c383-94c6-4844-b89f-dc1885e51ef2" ddl="f80ceff5-9fb3-4b9b-b543-929b5feff9de" />
+    <mapping uuid="458d5da3-eb03-42e2-81ba-c95dbea8aa84" name="DDL Mapping">
+      <data-sources db="d460c383-94c6-4844-b89f-dc1885e51ef2" ddl="d79eec81-2166-4710-b887-2f398111187b" />
       <scope>
-        <node kind="schema" qname="shop" />
+        <node kind="schema" qname="shop2" />
       </scope>
     </mapping>
   </component>
